@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UnderCommander</class>
+ <widget class="QMainWindow" name="UnderCommander">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>UnderCommander</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="backRight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+           <string>Back</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="forwardRight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+           <string>Forward</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonRight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+           <string>Go:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="textEditRight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBoxRight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::WheelFocus</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="FSView" name="rightView">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="autoScroll">
+         <bool>false</bool>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+        </property>
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropMode">
+         <enum>QAbstractItemView::DragDrop</enum>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::CopyAction</enum>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="verticalScrollMode">
+         <enum>QAbstractItemView::ScrollPerItem</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="backLeft">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+           <string>Back</string>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="forwardLeft">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+           <string>Forward</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonLeft">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+           <string>Go:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="textEditLeft">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+          <property name="cursorMoveStyle">
+           <enum>Qt::LogicalMoveStyle</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBoxLeft">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::WheelFocus</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="FSView" name="leftView">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::ActionsContextMenu</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustIgnored</enum>
+        </property>
+        <property name="autoScroll">
+         <bool>false</bool>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropMode">
+         <enum>QAbstractItemView::DragDrop</enum>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::CopyAction</enum>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectItems</enum>
+        </property>
+        <property name="textElideMode">
+         <enum>Qt::ElideRight</enum>
+        </property>
+        <property name="verticalScrollMode">
+         <enum>QAbstractItemView::ScrollPerItem</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuLeft_panel_2">
+     <property name="title">
+      <string>Left panel</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/menubar/icons/icons8-меню-500.png</normaloff>:/new/menubar/icons/icons8-меню-500.png</iconset>
+     </property>
+     <addaction name="actionNew_file"/>
+     <addaction name="actionNew_folder"/>
+    </widget>
+    <widget class="QMenu" name="menuRight_panel_3">
+     <property name="title">
+      <string>Right panel</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/menubar/icons/icons8-меню-500.png</normaloff>:/new/menubar/icons/icons8-меню-500.png</iconset>
+     </property>
+     <addaction name="actionNew_file_3"/>
+     <addaction name="actionNew_folder_2"/>
+    </widget>
+    <addaction name="actionOpen_directory_left"/>
+    <addaction name="actionOpen_directory_right"/>
+    <addaction name="separator"/>
+    <addaction name="menuLeft_panel_2"/>
+    <addaction name="menuRight_panel_3"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Filters</string>
+    </property>
+    <widget class="QMenu" name="menuLeft_panel">
+     <property name="title">
+      <string>Left panel</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/menubar/icons/icons8-меню-500.png</normaloff>:/new/menubar/icons/icons8-меню-500.png</iconset>
+     </property>
+     <addaction name="actionShow_files_and_folders"/>
+     <addaction name="separator"/>
+     <addaction name="actionShow_only_files"/>
+     <addaction name="actionShow_only_folders"/>
+    </widget>
+    <widget class="QMenu" name="menuRight_panel">
+     <property name="title">
+      <string>Right panel</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/menubar/icons/icons8-меню-500.png</normaloff>:/new/menubar/icons/icons8-меню-500.png</iconset>
+     </property>
+     <addaction name="actionShow_files_and_folders_2"/>
+     <addaction name="separator"/>
+     <addaction name="actionShow_only_files_2"/>
+     <addaction name="actionShow_only_folders_2"/>
+    </widget>
+    <addaction name="menuLeft_panel"/>
+    <addaction name="separator"/>
+    <addaction name="menuRight_panel"/>
+   </widget>
+   <widget class="QMenu" name="menuTools_2">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <addaction name="actionDefault"/>
+     <addaction name="actionDark"/>
+    </widget>
+    <addaction name="actionSettings"/>
+    <addaction name="menuTheme"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionAbout_UnderCommander"/>
+   </widget>
+   <widget class="QMenu" name="menuTabs">
+    <property name="title">
+     <string>Tabs</string>
+    </property>
+    <addaction name="actionEnable_tabs"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreate_tab"/>
+    <addaction name="actionNew_right_tab"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose_all_left_tabs"/>
+    <addaction name="actionClose_all_right_tabs"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuLeft">
+     <property name="title">
+      <string>Left</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/menubar/icons/icons8-меню-500.png</normaloff>:/new/menubar/icons/icons8-меню-500.png</iconset>
+     </property>
+     <addaction name="actionEnable_type_column"/>
+     <addaction name="actionEnable_size_column"/>
+     <addaction name="actionEnable_date_column"/>
+    </widget>
+    <widget class="QMenu" name="menuRight">
+     <property name="title">
+      <string>Right</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/new/menubar/icons/icons8-меню-500.png</normaloff>:/new/menubar/icons/icons8-меню-500.png</iconset>
+     </property>
+     <addaction name="actionEnable_type_column_2"/>
+     <addaction name="actionEnable_size_column_2"/>
+     <addaction name="actionEnable_date_column_2"/>
+    </widget>
+    <addaction name="menuLeft"/>
+    <addaction name="separator"/>
+    <addaction name="menuRight"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuView"/>
+   <addaction name="menuTabs"/>
+   <addaction name="menuTools_2"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBarRight">
+   <property name="windowTitle">
+    <string>Right toolbar</string>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomToolBarArea|Qt::RightToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>RightToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen_directory_right"/>
+   <addaction name="actionNew_file_3"/>
+   <addaction name="actionNew_folder_2"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarLeft">
+   <property name="windowTitle">
+    <string>Left toolbar</string>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomToolBarArea|Qt::LeftToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen_directory_left"/>
+   <addaction name="actionNew_file"/>
+   <addaction name="actionNew_folder"/>
+  </widget>
+  <action name="actionOpen_directory_left">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-открыть-папку-500.png</normaloff>:/new/menubar/icons/icons8-открыть-папку-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open directory(left)</string>
+   </property>
+  </action>
+  <action name="actionOpen_directory_right">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-открыть-папку-500.png</normaloff>:/new/menubar/icons/icons8-открыть-папку-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open directory(right)</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-выход-500.png</normaloff>:/new/menubar/icons/icons8-выход-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-настройки-500.png</normaloff>:/new/menubar/icons/icons8-настройки-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionDefault">
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionDark">
+   <property name="text">
+    <string>Dark</string>
+   </property>
+  </action>
+  <action name="actionShow_only_files">
+   <property name="text">
+    <string>Show only files</string>
+   </property>
+  </action>
+  <action name="actionShow_only_folders">
+   <property name="text">
+    <string>Show only folders</string>
+   </property>
+  </action>
+  <action name="actionShow_only_files_2">
+   <property name="text">
+    <string>Show only files</string>
+   </property>
+  </action>
+  <action name="actionShow_only_folders_2">
+   <property name="text">
+    <string>Show only folders</string>
+   </property>
+  </action>
+  <action name="actionAbout_UnderCommander">
+   <property name="text">
+    <string>About UnderCommander</string>
+   </property>
+  </action>
+  <action name="actionNew_file">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-файл-500.png</normaloff>:/new/menubar/icons/icons8-файл-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>New file</string>
+   </property>
+  </action>
+  <action name="actionNew_folder">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-папка-500.png</normaloff>:/new/menubar/icons/icons8-папка-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>New folder</string>
+   </property>
+  </action>
+  <action name="actionNew_file_3">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-файл-500.png</normaloff>:/new/menubar/icons/icons8-файл-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>New file</string>
+   </property>
+  </action>
+  <action name="actionNew_folder_2">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/new/menubar/icons/icons8-папка-500.png</normaloff>:/new/menubar/icons/icons8-папка-500.png</iconset>
+   </property>
+   <property name="text">
+    <string>New folder</string>
+   </property>
+  </action>
+  <action name="actionCreate_tab">
+   <property name="text">
+    <string>New left tab</string>
+   </property>
+  </action>
+  <action name="actionNew_right_tab">
+   <property name="text">
+    <string>New right tab</string>
+   </property>
+  </action>
+  <action name="actionClose_all_left_tabs">
+   <property name="text">
+    <string>Close all left tabs</string>
+   </property>
+  </action>
+  <action name="actionClose_all_right_tabs">
+   <property name="text">
+    <string>Close all right tabs</string>
+   </property>
+  </action>
+  <action name="actionShow_files_and_folders">
+   <property name="text">
+    <string>Show files and folders</string>
+   </property>
+  </action>
+  <action name="actionShow_files_and_folders_2">
+   <property name="text">
+    <string>Show files and folders</string>
+   </property>
+  </action>
+  <action name="actionEnable_tabs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show tabs</string>
+   </property>
+  </action>
+  <action name="actionEnable_size_column">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable size column</string>
+   </property>
+  </action>
+  <action name="actionEnable_date_column">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable date column</string>
+   </property>
+  </action>
+  <action name="actionEnable_size_column_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable size column</string>
+   </property>
+  </action>
+  <action name="actionEnable_date_column_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable date column</string>
+   </property>
+  </action>
+  <action name="actionEnable_type_column">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable type column</string>
+   </property>
+  </action>
+  <action name="actionEnable_type_column_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enable type column</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FSView</class>
+   <extends>QTreeView</extends>
+   <header>fsview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>
