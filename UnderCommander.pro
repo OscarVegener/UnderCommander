@@ -28,6 +28,7 @@ SOURCES += \
     fsview.cpp \
     info.cpp \
     main.cpp \
+    modelviewmanager.cpp \
     newfile.cpp \
     newfolder.cpp \
     tabs.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     copyworker.h \
     fsview.h \
     info.h \
+    modelviewmanager.h \
     newfile.h \
     newfolder.h \
     tabs.h \
