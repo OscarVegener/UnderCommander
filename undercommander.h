@@ -1,7 +1,7 @@
 #ifndef UNDERCOMMANDER_H
 #define UNDERCOMMANDER_H
 
-#define stackLimit 100
+#define stackLimit 5
 
 #include <QMainWindow>
 #include <QDir>

@@ -11,13 +11,13 @@ UnderCommander::UnderCommander(QWidget *parent)
     ui->setupUi(this);
 
     //Show disks on left side
-    drivesModelLeft = new QDirModel(this);
+    drivesModelLeft = new QDirModel(this); //todo
     drivesModelLeft->setFilter(QDir::Drives);
     ui->comboBoxLeft->setModel(drivesModelLeft);
-    //drivesModelLeft->refresh();
+//    //drivesModelLeft->refresh();
 
     //Show disks on right side
-    drivesModelRight = new QDirModel(this);
+    drivesModelRight = new QDirModel(this); //todo
     drivesModelRight->setFilter(QDir::Drives);
     ui->comboBoxRight->setModel(drivesModelRight);
 
