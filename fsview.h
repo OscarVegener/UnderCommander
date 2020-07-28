@@ -6,7 +6,7 @@
 #include <QAbstractItemView>
 #include <QHeaderView>
 
-#include "undercommander.h"
+//#include "undercommander.h"
 
 class FSView : public QTreeView
 {

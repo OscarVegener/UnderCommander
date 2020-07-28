@@ -49,3 +49,8 @@ QAction *SmallContextMenu::getInfoAction() const
 {
     return InfoAction;
 }
+
+QMenu *SmallContextMenu::getMenu() const
+{
+    return menu;
+}

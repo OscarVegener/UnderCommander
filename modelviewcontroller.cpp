@@ -42,6 +42,10 @@ ModelViewController::ModelViewController(QFileSystemModel *fsModel,
         emit IncorrectDefaultPathSignal("Current default path does not exist.");
     }
     Id = count++;
+    initFsModel();
+    initDriveModel();
+    initContextMenus();
+    initBackForwardNavigation();
 }
 
 int ModelViewController::count = 0;
@@ -293,7 +297,7 @@ void ModelViewController::changeDrive(const QString path)
     if (newPath != FsModel->rootPath()){
         clearForwardStack();
         backStack.push(FsModel->rootPath());
-        FsModel->setRootPath(path);
+        FsModel->setRootPath(newPath);
         if  (backStack.count() >=1 && !BackButton->isEnabled()){
             BackButton->setEnabled(true);
         }
@@ -353,13 +357,12 @@ void ModelViewController::initFsModel()
     FsModel->setFilter(QDir::AllEntries);
     backStack.push(DefaultPath);
 
+    FsViewModel->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(FsViewModel, &FSView::customContextMenuRequested, this, &ModelViewController::on_customMenuRequested);
     FsViewModel->setDragEnabled(true);
     FsViewModel->setAcceptDrops(true);
     FsViewModel->setDropIndicatorShown(true);
     FsViewModel->init();
-
-    //ui->leftView->setContextMenuPolicy(Qt::CustomContextMenu);
-    //connect(ui->leftView, &FSView::customContextMenuRequested, this, &UnderCommander::on_customMenuRequestedLeft);
 }
 
 //todo
@@ -367,15 +370,79 @@ void ModelViewController::initContextMenus()
 {
     //ContextMenu
     conMenu = new ContextMenu(this);
+    connect(conMenu->getOpenAction(), &QAction::triggered, this, &ModelViewController::contextOpen);
+    connect(conMenu->getPrintAction(), &QAction::triggered, this, &ModelViewController::contextPrint);
+    connect(conMenu->getNewFileAction(), &QAction::triggered, this, &ModelViewController::contextNewFile);
+    connect(conMenu->getNewFolderAction(), &QAction::triggered, this, &ModelViewController::contextNewFolder);
+    connect(conMenu->getCutAction(), &QAction::triggered, this, &ModelViewController::contextCut);
+    connect(conMenu->getCopyAction(), &QAction::triggered, this, &ModelViewController::contextCopy);
+    connect(conMenu->getCopyToClipboardAction(), &QAction::triggered, this, &ModelViewController::contextCopyToClipboard);
+    connect(conMenu->getPasteAction(), &QAction::triggered, this, &ModelViewController::contextPaste);
+    connect(conMenu->getPasteToRootAction(), &QAction::triggered, this, &ModelViewController::contextPasteToRoot);
+    connect(conMenu->getDeleteAction(), &QAction::triggered, this, &ModelViewController::contextDelete);
+    connect(conMenu->getRenameAction(), &QAction::triggered, this, &ModelViewController::contextRename);
+    connect(conMenu->getInfoAction(), &QAction::triggered, this, &ModelViewController::contextInfo);
 
     //SmallContextMenu
     smallConMenu = new SmallContextMenu(this);
+    connect(smallConMenu->getNewFileAction(), &QAction::triggered, this, &ModelViewController::contextNewFile);
+    connect(smallConMenu->getNewFolderAction(), &QAction::triggered, this, &ModelViewController::contextNewFolder);
+    connect(smallConMenu->getPasteToRootAction(), &QAction::triggered, this, &ModelViewController::contextPasteToRoot);
+    connect(smallConMenu->getInfoAction(), &QAction::triggered, this, &ModelViewController::contextInfo);
+
 }
 
 void ModelViewController::initBackForwardNavigation()
 {
     BackButton->setEnabled(false);
     ForwardButton->setEnabled(false);
+}
+
+void ModelViewController::on_customMenuRequested(const QPoint &pos)
+{
+    QModelIndex index = FsViewModel->indexAt(pos);
+    QFileInfo fileInfo = FsModel->fileInfo(index);
+    //Show Context menu
+    if (FsViewModel->selectionModel()->isSelected(index) && fileInfo.fileName() != "." && fileInfo.fileName() != ".."){
+        conMenu->getPrintAction()->setEnabled(true);
+        if (!fileInfo.isFile()){
+            conMenu->getPrintAction()->setEnabled(false);
+        }
+        conMenu->getCopyAction()->setEnabled(false);
+        QModelIndexList list = FsViewModel->selectionModel()->selectedIndexes();
+        bool atLeastOneFile = false;
+        foreach (QModelIndex idx, list){
+            if (FsModel->fileInfo(idx).isFile()){
+                atLeastOneFile = true;
+                break;
+            }
+        }
+        if (atLeastOneFile){
+            conMenu->getCopyAction()->setEnabled(true);
+        }
+        conMenu->getPrintAction()->setEnabled(false);
+        if (fileInfo.completeSuffix() == "txt"){
+            conMenu->getPrintAction()->setEnabled(true);
+        }
+        conMenu->getPasteAction()->setEnabled(false);
+        if (fileInfo.isDir() && !copyPaths.isEmpty()){
+            conMenu->getPasteAction()->setEnabled(true);
+        }
+        conMenu->getPasteToRootAction()->setEnabled(false);
+        if (!copyPaths.isEmpty()){
+            conMenu->getPasteToRootAction()->setEnabled(true);
+        }
+        conMenu->getMenu()->popup(FsViewModel->viewport()->mapToGlobal(pos));
+    }
+    //Show small context menu
+    else if (fileInfo.fileName() != "." && fileInfo.fileName() != "..")
+    {
+        smallConMenu->getPasteToRootAction()->setEnabled(false);
+        if (!copyPaths.isEmpty()){
+            smallConMenu->getPasteToRootAction()->setEnabled(true);
+        }
+        smallConMenu->getMenu()->popup(FsViewModel->viewport()->mapToGlobal(pos));
+    }
 }
 
 void ModelViewController::on_rootPathChanged(const QString &newPath)
@@ -395,4 +462,64 @@ void ModelViewController::on_rootPathChanged(const QString &newPath)
 void ModelViewController::updateDiskList()
 {
     DriveModel->refresh();
+}
+
+void ModelViewController::contextOpen()
+{
+
+}
+
+void ModelViewController::contextPrint()
+{
+
+}
+
+void ModelViewController::contextNewFile()
+{
+
+}
+
+void ModelViewController::contextNewFolder()
+{
+
+}
+
+void ModelViewController::contextCut()
+{
+
+}
+
+void ModelViewController::contextCopy()
+{
+
+}
+
+void ModelViewController::contextCopyToClipboard()
+{
+
+}
+
+void ModelViewController::contextPaste()
+{
+
+}
+
+void ModelViewController::contextPasteToRoot()
+{
+
+}
+
+void ModelViewController::contextDelete()
+{
+
+}
+
+void ModelViewController::contextRename()
+{
+
+}
+
+void ModelViewController::contextInfo()
+{
+
 }

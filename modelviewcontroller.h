@@ -9,9 +9,10 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QPushButton>
-#include <QException>
 #include <QTimer>
 #include <QStack>
+#include <QMainWindow>
+#include <QDesktopServices>
 #include "fsview.h"
 #include "contextmenu.h"
 #include "smallcontextmenu.h"
@@ -120,6 +121,9 @@ private:
     void initContextMenus();
     void initBackForwardNavigation();
 
+    //Stores paths to copy
+    QStringList copyPaths;
+
     //Context menu
     ContextMenu *conMenu;
 
@@ -127,8 +131,23 @@ private:
     SmallContextMenu *smallConMenu;
 
 private slots:
+    void on_customMenuRequested(const QPoint &pos);
     void on_rootPathChanged(const QString &newPath);
     void updateDiskList();
+
+    //Context menu slots
+    void contextOpen();
+    void contextPrint();
+    void contextNewFile();
+    void contextNewFolder();
+    void contextCut();
+    void contextCopy();
+    void contextCopyToClipboard();
+    void contextPaste();
+    void contextPasteToRoot();
+    void contextDelete();
+    void contextRename();
+    void contextInfo();
 
 signals:
 

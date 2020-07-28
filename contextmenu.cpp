@@ -121,3 +121,8 @@ QAction *ContextMenu::getInfoAction() const
 {
     return InfoAction;
 }
+
+QMenu *ContextMenu::getMenu() const
+{
+    return menu;
+}

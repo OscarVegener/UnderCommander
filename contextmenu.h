@@ -35,6 +35,8 @@ public:
 
     QAction *getInfoAction() const;
 
+    QMenu *getMenu() const;
+
 private:
     QMenu *menu;
     QMenu *newMenu;
