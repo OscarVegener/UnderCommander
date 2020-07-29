@@ -404,11 +404,13 @@ void ModelViewController::on_customMenuRequested(const QPoint &pos)
     QFileInfo fileInfo = FsModel->fileInfo(index);
     //Show Context menu
     if (FsViewModel->selectionModel()->isSelected(index) && fileInfo.fileName() != "." && fileInfo.fileName() != ".."){
-        conMenu->getPrintAction()->setEnabled(true);
-        if (!fileInfo.isFile()){
+        if (fileInfo.completeSuffix() == "txt"){
+            conMenu->getPrintAction()->setEnabled(true);
+        }
+        else{
             conMenu->getPrintAction()->setEnabled(false);
         }
-        conMenu->getCopyAction()->setEnabled(false);
+        //Gets all selected indexes
         QModelIndexList list = FsViewModel->selectionModel()->selectedIndexes();
         bool atLeastOneFile = false;
         foreach (QModelIndex idx, list){
@@ -417,29 +419,38 @@ void ModelViewController::on_customMenuRequested(const QPoint &pos)
                 break;
             }
         }
+        //CopyToClipboard action works only for files
         if (atLeastOneFile){
-            conMenu->getCopyAction()->setEnabled(true);
+            conMenu->getCopyToClipboardAction()->setEnabled(true);
         }
-        conMenu->getPrintAction()->setEnabled(false);
-        if (fileInfo.completeSuffix() == "txt"){
-            conMenu->getPrintAction()->setEnabled(true);
+        else{
+            conMenu->getCopyToClipboardAction()->setEnabled(false);
         }
-        conMenu->getPasteAction()->setEnabled(false);
+        //Using Paste action, we can paste only to dir
         if (fileInfo.isDir() && !copyPaths.isEmpty()){
             conMenu->getPasteAction()->setEnabled(true);
         }
-        conMenu->getPasteToRootAction()->setEnabled(false);
+        else{
+            conMenu->getPasteAction()->setEnabled(false);
+        }
+        //We can paste to root anytime if copyPaths is not empty
         if (!copyPaths.isEmpty()){
             conMenu->getPasteToRootAction()->setEnabled(true);
+        }
+        else{
+            conMenu->getPasteToRootAction()->setEnabled(false);
         }
         conMenu->getMenu()->popup(FsViewModel->viewport()->mapToGlobal(pos));
     }
     //Show small context menu
     else if (fileInfo.fileName() != "." && fileInfo.fileName() != "..")
     {
-        smallConMenu->getPasteToRootAction()->setEnabled(false);
+        //We can paste to root anytime if copyPaths is not empty
         if (!copyPaths.isEmpty()){
             smallConMenu->getPasteToRootAction()->setEnabled(true);
+        }
+        else{
+            smallConMenu->getPasteToRootAction()->setEnabled(false);
         }
         smallConMenu->getMenu()->popup(FsViewModel->viewport()->mapToGlobal(pos));
     }
@@ -466,12 +477,22 @@ void ModelViewController::updateDiskList()
 
 void ModelViewController::contextOpen()
 {
-
+    QModelIndex index = FsViewModel->currentIndex();
+    if (FsViewModel->selectionModel()->isSelected(index)){
+        open(index);
+    }
 }
 
 void ModelViewController::contextPrint()
 {
-
+    QModelIndex index = FsViewModel->currentIndex();
+    if (FsViewModel->selectionModel()->isSelected(index)){
+        QFileInfo fileInfo = FsModel->fileInfo(index);
+        QProcess *printProcess = new QProcess(this);
+        QStringList arguments;
+        arguments << "/p" << fileInfo.absoluteFilePath();
+        printProcess->start("C:\\Windows\\notepad.exe", arguments);
+    }
 }
 
 void ModelViewController::contextNewFile()
@@ -516,7 +537,10 @@ void ModelViewController::contextDelete()
 
 void ModelViewController::contextRename()
 {
-
+    QModelIndex index = FsViewModel->currentIndex();
+    if (FsViewModel->selectionModel()->isSelected(index)){
+        FsViewModel->edit(index);
+    }
 }
 
 void ModelViewController::contextInfo()

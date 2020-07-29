@@ -16,6 +16,7 @@ UnderCommander::UnderCommander(QWidget *parent)
     drivesModelLeft = new QDirModel(parent = this);
     drivesModelRight = new QDirModel(parent = this);
 
+
     leftController = new ModelViewController(leftModel,
                                              drivesModelLeft,
                                              ui->textEditLeft,
@@ -27,104 +28,27 @@ UnderCommander::UnderCommander(QWidget *parent)
                                              this,
                                              "C:\\",
                                              this);
-
-//    //Show disks on left side
-//    drivesModelLeft = new QDirModel(this); //todo
-//    drivesModelLeft->setFilter(QDir::Drives);
-//    ui->comboBoxLeft->setModel(drivesModelLeft);
-//    //drivesModelLeft->refresh();
-
-//    //Show disks on right side
-//    drivesModelRight = new QDirModel(this); //todo
-//    drivesModelRight->setFilter(QDir::Drives);
-//    ui->comboBoxRight->setModel(drivesModelRight);
-
-//    //Setting timer to check if new disks connected
-//    timer = new QTimer(this);
-//    connect(timer, &QTimer::timeout, this, &UnderCommander::updateDiskList);
-//    timer->start(500);
-
-//    //Root path on left
-//    ui->textEditLeft->setText(ui->comboBoxLeft->currentText()+"/");
-//    textEditLeftCurrent = ui->textEditLeft->text();
-
-//    //Root path on right
-//    ui->textEditRight->setText(ui->comboBoxRight->currentText()+"/");
-//    textEditRightCurrent = ui->textEditRight->text();
-
-//    //Setting up left panel
-//    leftModel = new QFileSystemModel(this);
-//    leftModel->setReadOnly(false);
-//    ui->leftView->setModel(leftModel);
-//    ui->leftView->setRootIndex(leftModel->setRootPath(ui->textEditLeft->text()));
-//    leftModel->setFilter(QDir::AllEntries);
-//    leftCurrent = ui->textEditLeft->text();
-//    leftStack.push(ui->textEditLeft->text());
-//    ui->leftView->setContextMenuPolicy(Qt::CustomContextMenu);
-//    connect(ui->leftView, &FSView::customContextMenuRequested, this, &UnderCommander::on_customMenuRequestedLeft);
-//    ui->leftView->setDragEnabled(true);
-//    ui->leftView->setAcceptDrops(true);
-//    ui->leftView->setDropIndicatorShown(true);
-//    ui->leftView->init();
-//    customIconProvider *iconProvider = new customIconProvider();
-//    leftModel->setIconProvider(iconProvider);
-
-//    //Setting up ContextMenu for left panel
-//    createLeftContextMenu();
-//    createSmallLeftContextMenu();
-
-//    //Setting up right panel
-//    rightModel = new QFileSystemModel(this);
-//    rightModel->setReadOnly(false);
-//    ui->rightView->setModel(rightModel);
-//    ui->rightView->setRootIndex(rightModel->setRootPath(ui->textEditRight->text()));
-//    rightModel->setFilter(QDir::AllEntries);
-//    rightCurrent = ui->textEditRight->text();
-//    rightStack.push(ui->textEditRight->text());
-//    ui->rightView->setContextMenuPolicy(Qt::CustomContextMenu);
-//    connect(ui->rightView, &FSView::customContextMenuRequested, this, &UnderCommander::on_customMenuRequestedRight);
-//    ui->rightView->setDragEnabled(true);
-//    ui->rightView->setAcceptDrops(true);
-//    ui->rightView->setDropIndicatorShown(true);
-//    ui->rightView->init();
-
-//    //Setting up ContextMenu for right panel
-//    createRightContextMenu();
-//    createSmallRightContextMenu();
-
-//    saveTextEditsSettings();
-//    initBackForwardButtons();
+//    rightController = new ModelViewController(rightModel,
+//                                              drivesModelRight,
+//                                              ui->textEditRight,
+//                                              ui->comboBoxRight,
+//                                              ui->forwardRight,
+//                                              ui->backRight,
+//                                              ui->pushButtonRight,
+//                                              ui->rightView,
+//                                              this,
+//                                              "C:\\",
+//                                              this);
+    //ui->rightView->setModel(rightModel);
+    //rightModel->setRootPath(rightModel->myComputer().toString());
     initPalettes();
     //createTabs();
 }
 
 UnderCommander::~UnderCommander()
 {
-//    clearMemoryLeftContextMenu();
-//    clearMemorySmallLeftContextMenu();
-//    clearMemoryRightContextMenu();
-//    clearMemorySmallRightContextMenu();
     delete ui;
 }
-
-//void UnderCommander::ifUserGoesToAnotherDiskLeft(){
-//    //if user goes to another disk
-//    QString path = leftModel->rootPath();
-//    QString comboPath;
-//    comboPath.push_back(path.at(0));
-//    comboPath.push_back(path.at(1));
-//    int comboIndex = ui->comboBoxLeft->findText(comboPath);
-//    ui->comboBoxLeft->setCurrentIndex(comboIndex);
-//}
-
-//void UnderCommander::ifUserGoesToAnotherDiskRight(){
-//    QString path = rightModel->rootPath();
-//    QString comboPath;
-//    comboPath.push_back(path.at(0));
-//    comboPath.push_back(path.at(1));
-//    int comboIndex = ui->comboBoxRight->findText(comboPath);
-//    ui->comboBoxRight->setCurrentIndex(comboIndex);
-//}
 
 //copy_options UnderCommander::askForCopyOptions()
 //{
@@ -191,130 +115,6 @@ UnderCommander::~UnderCommander()
 //    QApplication::clipboard()->setMimeData(data);
 //}
 
-//void UnderCommander::clearMemoryLeftContextMenu()
-//{
-//    delete leftInfoAction;
-//    delete leftRenameAction;
-//    delete leftDeleteAction;
-//    delete leftPasteRootAction;
-//    delete leftPasteAction;
-//    delete leftCopyFolderFilesAction;
-//    delete leftCopyAction;
-//    delete leftCutAction;
-//    delete leftNewFolderAction;
-//    delete leftNewFileAction;
-//    delete leftPrintAction;
-//    delete leftOpenAction;
-//    delete newLeftMenu;
-//    delete leftContextMenu;
-//}
-
-//void UnderCommander::createLeftContextMenu()
-//{
-//    leftContextMenu = new QMenu(this);
-//    newLeftMenu = new QMenu("New", this);
-
-//    leftOpenAction = new QAction(tr("&Open"), this);
-//    leftOpenAction->setToolTip("Open new folder/file");
-//    connect(leftOpenAction, &QAction::triggered, this, &UnderCommander::leftContextOpen);
-
-//    leftPrintAction = new QAction(tr("&Print file"), this);
-//    leftOpenAction->setToolTip("Print selected file");
-//    connect(leftPrintAction, &QAction::triggered, this, &UnderCommander::leftContextPrint);
-
-//    leftNewFileAction = new QAction(tr("&New File"), this);
-//    leftNewFileAction->setToolTip("Create new file");
-//    connect(leftNewFileAction, &QAction::triggered, this, &UnderCommander::leftContextNewFile);
-
-//    leftNewFolderAction = new QAction(tr("&New Folder"), this);
-//    leftNewFolderAction->setToolTip("Create new folder");
-//    connect(leftNewFolderAction, &QAction::triggered, this, &UnderCommander::leftContextNewFolder);
-
-//    leftCutAction = new QAction(tr("&Cut"), this);
-//    leftCutAction->setToolTip("Cut folder/file");
-//    connect(leftCutAction, &QAction::triggered, this, &UnderCommander::leftContextCut);
-
-//    leftCopyAction = new QAction(tr("&Copy files to clipboard"), this);
-//    leftCopyAction->setToolTip("Copy files to clipboard");
-//    connect(leftCopyAction, &QAction::triggered, this, &UnderCommander::leftContextCopy);
-
-//    leftCopyFolderFilesAction = new QAction(tr("&Copy"), this);
-//    leftCopyFolderFilesAction->setToolTip("Copy file/folder to another place");
-//    connect(leftCopyFolderFilesAction, &QAction::triggered, this, &UnderCommander::leftContextCopyFolderFiles);
-
-//    leftPasteAction = new QAction(tr("&Paste"), this);
-//    leftPasteAction->setToolTip("Paste file/folder in selected folder");
-//    connect(leftPasteAction, &QAction::triggered, this, &UnderCommander::leftContextPaste);
-
-//    leftPasteRootAction = new QAction(tr("&Paste to root"), this);
-//    leftPasteRootAction->setToolTip("Paste file/folder in current folder");
-//    connect(leftPasteRootAction, &QAction::triggered, this, &UnderCommander::leftContextPasteRoot);
-
-//    leftDeleteAction = new QAction(tr("&Delete"), this);
-//    leftDeleteAction->setToolTip("Delete file/folder");
-//    connect(leftDeleteAction, &QAction::triggered, this, &UnderCommander::leftContextDelete);
-
-//    leftRenameAction = new QAction(tr("&Rename"), this);
-//    leftRenameAction->setToolTip("Rename file/folder");
-//    connect(leftRenameAction, &QAction::triggered, this, &UnderCommander::leftContextRename);
-
-//    leftInfoAction = new QAction(tr("&Properties"));
-//    leftInfoAction->setToolTip("Show info about file/folder");
-//    connect(leftInfoAction, &QAction::triggered, this, &UnderCommander::leftContextInfo);
-
-//    newLeftMenu->addAction(leftNewFileAction);
-//    newLeftMenu->addAction(leftNewFolderAction);
-//    leftContextMenu->addAction(leftOpenAction);
-//    leftContextMenu->addAction(leftPrintAction);
-//    leftContextMenu->addMenu(newLeftMenu);
-//    leftContextMenu->addAction(leftCutAction);
-//    leftContextMenu->addAction(leftCopyAction);
-//    leftContextMenu->addAction(leftCopyFolderFilesAction);
-//    leftContextMenu->addAction(leftPasteAction);
-//    leftContextMenu->addAction(leftPasteRootAction);
-//    leftContextMenu->addAction(leftDeleteAction);
-//    leftContextMenu->addAction(leftRenameAction);
-//    leftContextMenu->addAction(leftInfoAction);
-//}
-
-//void UnderCommander::clearMemorySmallLeftContextMenu()
-//{
-//    delete smallLeftInfoAction;
-//    delete smallLeftPasteAction;
-//    delete smallLeftNewFolderAction;
-//    delete smallLeftNewFileAction;
-//    delete smallNewLeftMenu;
-//    delete smallLeftContextMenu;
-//}
-
-//void UnderCommander::createSmallLeftContextMenu()
-//{
-//    smallLeftContextMenu = new QMenu(this);
-//    smallNewLeftMenu = new QMenu("New", this);
-
-//    smallLeftNewFileAction = new QAction(tr("&New File"), this);
-//    smallLeftNewFileAction->setToolTip("Create new file");
-//    connect(smallLeftNewFileAction, &QAction::triggered, this, &UnderCommander::smallLeftContextNewFile);
-
-//    smallLeftNewFolderAction = new QAction(tr("&New Folder"), this);
-//    smallLeftNewFolderAction->setToolTip("Create new folder");
-//    connect(smallLeftNewFolderAction, &QAction::triggered, this, &UnderCommander::smallLeftContextNewFolder);
-
-//    smallLeftPasteAction = new QAction(tr("&Paste to root"), this);
-//    smallLeftPasteAction->setToolTip("Paste file/folder in current folder");
-//    connect(smallLeftPasteAction, &QAction::triggered, this, &UnderCommander::leftContextPasteRoot);
-
-//    smallLeftInfoAction = new QAction(tr("&Properties"));
-//    smallLeftInfoAction->setToolTip("Show info about file/folder");
-//    connect(smallLeftInfoAction, &QAction::triggered, this, &UnderCommander::smallLeftContextInfo);
-
-//    smallNewLeftMenu->addAction(smallLeftNewFileAction);
-//    smallNewLeftMenu->addAction(smallLeftNewFolderAction);
-//    smallLeftContextMenu->addMenu(smallNewLeftMenu);
-//    smallLeftContextMenu->addAction(smallLeftPasteAction);
-//    smallLeftContextMenu->addAction(smallLeftInfoAction);
-//}
-
 //void UnderCommander::displayRight(QModelIndex index)
 //{
 //    QString iPath = rightModel->fileInfo(index).absoluteFilePath();
@@ -345,129 +145,6 @@ UnderCommander::~UnderCommander()
 //    QApplication::clipboard()->setMimeData(data);
 //}
 
-//void UnderCommander::clearMemoryRightContextMenu()
-//{
-//    delete rightInfoAction;
-//    delete rightRenameAction;
-//    delete rightDeleteAction;
-//    delete rightPasteRootAction;
-//    delete rightPasteAction;
-//    delete rightCopyFolderFilesAction;
-//    delete rightCopyAction;
-//    delete rightCutAction;
-//    delete rightNewFolderAction;
-//    delete rightNewFileAction;
-//    delete rightPrintAction;
-//    delete rightOpenAction;
-//    delete newRightMenu;
-//    delete rightContextMenu;
-//}
-
-//void UnderCommander::createRightContextMenu()
-//{
-//    rightContextMenu = new QMenu(this);
-//    newRightMenu = new QMenu("New", this);
-
-//    rightOpenAction = new QAction(tr("&Open"), this);
-//    rightOpenAction->setToolTip("Open new folder/file");
-//    connect(rightOpenAction, &QAction::triggered, this, &UnderCommander::rightContextOpen);
-
-//    rightPrintAction = new QAction(tr("&Print file"), this);
-//    rightOpenAction->setToolTip("Print selected file");
-//    connect(rightPrintAction, &QAction::triggered, this, &UnderCommander::rightContextPrint);
-
-//    rightNewFileAction = new QAction(tr("&New File"), this);
-//    rightNewFileAction->setToolTip("Create new file");
-//    connect(rightNewFileAction, &QAction::triggered, this, &UnderCommander::rightContextNewFile);
-
-//    rightNewFolderAction = new QAction(tr("&New Folder"), this);
-//    rightNewFolderAction->setToolTip("Create new folder");
-//    connect(rightNewFolderAction, &QAction::triggered, this, &UnderCommander::rightContextNewFolder);
-
-//    rightCutAction = new QAction(tr("&Cut"), this);
-//    rightCutAction->setToolTip("Cut folder/file");
-//    connect(rightCutAction, &QAction::triggered, this, &UnderCommander::rightContextCut);
-
-//    rightCopyAction = new QAction(tr("&Copy files to clipboard"), this);
-//    rightCopyAction->setToolTip("Copy files to clipboard");
-//    connect(rightCopyAction, &QAction::triggered, this, &UnderCommander::rightContextCopy);
-
-//    rightCopyFolderFilesAction = new QAction(tr("&Copy"), this);
-//    rightCopyFolderFilesAction->setToolTip("Copy file/folder to another place");
-//    connect(rightCopyFolderFilesAction, &QAction::triggered, this, &UnderCommander::rightContextCopyFolderFiles);
-
-//    rightPasteAction = new QAction(tr("&Paste"), this);
-//    rightPasteAction->setToolTip("Paste file/folder in selected folder");
-//    connect(rightPasteAction, &QAction::triggered, this, &UnderCommander::rightContextPaste);
-
-//    rightPasteRootAction = new QAction(tr("&Paste to root"), this);
-//    rightPasteRootAction->setToolTip("Paste file/folder in current folder");
-//    connect(rightPasteRootAction, &QAction::triggered, this, &UnderCommander::rightContextPasteRoot);
-
-//    rightDeleteAction = new QAction(tr("&Delete"), this);
-//    rightDeleteAction->setToolTip("Delete file/folder");
-//    connect(rightDeleteAction, &QAction::triggered, this, &UnderCommander::rightContextDelete);
-
-//    rightRenameAction = new QAction(tr("&Rename"), this);
-//    rightRenameAction->setToolTip("Rename file/folder");
-//    connect(rightRenameAction, &QAction::triggered, this, &UnderCommander::rightContextRename);
-
-//    rightInfoAction = new QAction(tr("&Properties"));
-//    rightInfoAction->setToolTip("Show info about file/folder");
-//    connect(rightInfoAction, &QAction::triggered, this, &UnderCommander::rightContextInfo);
-
-//    newRightMenu->addAction(rightNewFileAction);
-//    newRightMenu->addAction(rightNewFolderAction);
-//    rightContextMenu->addAction(rightOpenAction);
-//    rightContextMenu->addAction(rightPrintAction);
-//    rightContextMenu->addMenu(newRightMenu);
-//    rightContextMenu->addAction(rightCutAction);
-//    rightContextMenu->addAction(rightCopyAction);
-//    rightContextMenu->addAction(rightCopyFolderFilesAction);
-//    rightContextMenu->addAction(rightPasteAction);
-//    rightContextMenu->addAction(rightPasteRootAction);
-//    rightContextMenu->addAction(rightDeleteAction);
-//    rightContextMenu->addAction(rightRenameAction);
-//    rightContextMenu->addAction(rightInfoAction);
-//}
-
-//void UnderCommander::clearMemorySmallRightContextMenu()
-//{
-//    delete smallRightInfoAction;
-//    delete smallRightPasteAction;
-//    delete smallRightNewFolderAction;
-//    delete smallRightNewFileAction;
-//    delete smallNewRightMenu;
-//    delete smallRightContextMenu;
-//}
-
-//void UnderCommander::createSmallRightContextMenu()
-//{
-//    smallRightContextMenu = new QMenu(this);
-//    smallNewRightMenu = new QMenu("New", this);
-
-//    smallRightNewFileAction = new QAction(tr("&New File"), this);
-//    smallRightNewFileAction->setToolTip("Create new file");
-//    connect(smallRightNewFileAction, &QAction::triggered, this, &UnderCommander::smallRightContextNewFile);
-
-//    smallRightNewFolderAction = new QAction(tr("&New Folder"), this);
-//    smallRightNewFolderAction->setToolTip("Create new folder");
-//    connect(smallRightNewFolderAction, &QAction::triggered, this, &UnderCommander::smallRightContextNewFolder);
-
-//    smallRightPasteAction = new QAction(tr("&Paste to root"), this);
-//    smallRightPasteAction->setToolTip("Paste file/folder in current folder");
-//    connect(smallRightPasteAction, &QAction::triggered, this, &UnderCommander::rightContextPasteRoot);
-
-//    smallRightInfoAction = new QAction(tr("&Properties"));
-//    smallRightInfoAction->setToolTip("Show info about file/folder");
-//    connect(smallRightInfoAction, &QAction::triggered, this, &UnderCommander::smallRightContextInfo);
-
-//    smallNewRightMenu->addAction(smallRightNewFileAction);
-//    smallNewRightMenu->addAction(smallRightNewFolderAction);
-//    smallRightContextMenu->addMenu(smallNewRightMenu);
-//    smallRightContextMenu->addAction(smallRightPasteAction);
-//    smallRightContextMenu->addAction(smallRightInfoAction);
-//}
 
 //void UnderCommander::createTabs()
 //{
@@ -533,286 +210,30 @@ void UnderCommander::initPalettes()
     darkPalette.setColor(QPalette::Disabled,QPalette::HighlightedText,QColor(127,127,127));
 }
 
-//void UnderCommander::changeLeftRootPath(const QString &path)
-//{
-//    clearLeftForwardStack();
-//    leftStack.push(leftModel->rootPath());
-//    ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//    leftCurrent = path;
-//    ui->textEditLeft->setText(path);
-//    QString comboPath;
-//    comboPath.push_back(path.at(0));
-//    comboPath.push_back(path.at(1));
-//    int index = ui->comboBoxLeft->findText(comboPath);
-//    ui->comboBoxLeft->setCurrentIndex(index);
-//    if  (leftStack.count() >=1 && !ui->backLeft->isEnabled()){
-//        ui->backLeft->setEnabled(true);
-//    }
-//}
-
-//void UnderCommander::changeRightRootPath(const QString &path)
-//{
-//    clearRightForwardStack();
-//    rightStack.push(rightModel->rootPath());
-//    ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//    rightCurrent = path;
-//    ui->textEditRight->setText(path);
-//    QString comboPath;
-//    comboPath.push_back(path.at(0));
-//    comboPath.push_back(path.at(1));
-//    int index = ui->comboBoxRight->findText(comboPath);
-//    ui->comboBoxRight->setCurrentIndex(index);
-//    if  (rightStack.count() >=1 && !ui->backRight->isEnabled()){
-//        ui->backRight->setEnabled(true);
-//    }
-//}
-
-//void UnderCommander::resetBackForwardLeft()
-//{
-//    ui->backLeft->setEnabled(false);
-//    leftStack.clear();
-//    leftStack.push_back(leftModel->rootPath());
-//    clearLeftForwardStack();
-//}
-
-//void UnderCommander::resetBackForwardRight()
-//{
-//    ui->backRight->setEnabled(false);
-//    rightStack.clear();
-//    rightStack.push_back(rightModel->rootPath());
-//    clearRightForwardStack();
-//}
-
-//void UnderCommander::clearLeftForwardStack(){
-//    forwardLeftStack.clear();
-//    if (ui->forwardLeft->isEnabled()){
-//        ui->forwardLeft->setEnabled(false);
-//    }
-//    restoredPathFlagLeft = false;
-//}
-
-//void UnderCommander::clearRightForwardStack(){
-//    forwardRightStack.clear();
-//    if  (ui->forwardRight->isEnabled()){
-//        ui->forwardRight->setEnabled(false);
-//    }
-//    restoredPathFlagRight = false;
-//}
-
-void UnderCommander::initBackForwardButtons(){
-//    ui->backLeft->setEnabled(false);
-//    ui->backRight->setEnabled(false);
-//    ui->forwardLeft->setEnabled(false);
-//    ui->forwardRight->setEnabled(false);
-}
-
-//void UnderCommander::saveTextEditsSettings(){
-//    textEditLeftFont = ui->textEditLeft->font();
-//    //textEditLeftColor = ui->textEditLeft->textColor();
-//    textEditRightFont = ui->textEditRight->font();
-//    //textEditRightColor = ui->textEditRight->textColor();
-//}
-
-void UnderCommander::updateDiskList(){
-//    drivesModelLeft->refresh();
-//    drivesModelRight->refresh();
-}
-
 void UnderCommander::on_leftView_clicked(const QModelIndex &index)
 {
-//    QFileInfo fileInfo = leftModel->fileInfo(index);
-//    if (fileInfo.fileName() != "." && fileInfo.fileName() != ".."){
-//        ui->textEditLeft->setText(leftModel->filePath(index));
-//    }
-//    else ui->textEditLeft->setText(leftCurrent);
     leftController->select(index);
 }
 
 void UnderCommander::on_rightView_clicked(const QModelIndex &index)
 {
-//    QFileInfo fileInfo = rightModel->fileInfo(index);
-//    if (fileInfo.fileName() != "." && fileInfo.fileName() != ".."){
-//        ui->textEditRight->setText(rightModel->filePath(index));
-//    }
-//    else ui->textEditRight->setText(rightCurrent);
+    //rightController->select(index);
 }
 
 void UnderCommander::on_leftView_doubleClicked(const QModelIndex &index)
 {
-//    QFileInfo fileInfo = leftModel->fileInfo(index);
-//    if (leftStack.count() == stackLimit){
-//        leftStack.clear();
-//        leftStack.push(ui->comboBoxLeft->currentText()+"/");
-//        QMessageBox::information(this, "UnderCommander", "LeftStack limit reached, stack is cleared!");
-//    }
-//    if  (fileInfo.isDir() && leftStack.count() >=1 && !ui->backLeft->isEnabled()){
-//        ui->backLeft->setEnabled(true);
-//    }
-//    if (fileInfo.fileName() == "."){
-//        if (restoredPathFlagLeft){
-//            clearLeftForwardStack();
-//        }
-//        leftStack.push(leftModel->rootPath());
-//        ui->leftView->setRootIndex(leftModel->setRootPath(ui->comboBoxLeft->currentText()+"/"));
-//        ui->textEditLeft->setText(ui->comboBoxLeft->currentText()+"/");
-//        textEditLeftCurrent = ui->textEditLeft->text();
-//        leftCurrent = leftModel->rootPath();
-//    }
-//    else if(fileInfo.fileName()== ".."){
-//        if (restoredPathFlagLeft){
-//            clearLeftForwardStack();
-//        }
-//        leftStack.push(leftModel->rootPath());
-//        QDir dir = fileInfo.dir();
-//        dir.cdUp();
-//        ui->leftView->setRootIndex(leftModel->setRootPath(dir.absolutePath()));
-//        ui->textEditLeft->setText(leftModel->rootPath());
-//        //if user goes to another disk
-//        ifUserGoesToAnotherDiskLeft();
-
-//        textEditLeftCurrent = ui->textEditLeft->text();
-//        leftCurrent = leftModel->rootPath();
-//    }
-//    else if(fileInfo.isDir()){
-//        if (restoredPathFlagLeft){
-//            clearLeftForwardStack();
-//        }
-//        leftStack.push(leftModel->rootPath());
-//        ui->leftView->setRootIndex(leftModel->setRootPath(leftModel->filePath(index)));
-//        ui->textEditLeft->setText(leftModel->rootPath());
-//        //if user goes to another disk
-//        ifUserGoesToAnotherDiskLeft();
-
-//        textEditLeftCurrent = ui->textEditLeft->text();
-//        leftCurrent=leftModel->rootPath();
-//    }
-//    else if(fileInfo.isFile()){
-//        QString filePath = leftModel->fileInfo(index).absoluteFilePath();
-//        QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
-//    }
     leftController->open(index);
 }
 
 void UnderCommander::on_rightView_doubleClicked(const QModelIndex &index)
 {
-//    QFileInfo fileInfo = rightModel->fileInfo(index);
-//    if (rightStack.count() == stackLimit){
-//        rightStack.clear();
-//        rightStack.push(ui->comboBoxRight->currentText()+"/");
-//        QMessageBox::information(this, "UnderCommander", "RightStack limit reached, stack is cleared!");
-//    }
-//    if  (fileInfo.isDir() && rightStack.count() >=1 && !ui->backRight->isEnabled()){
-//        ui->backRight->setEnabled(true);
-//    }
-//    if (fileInfo.fileName() == "."){
-//        if (restoredPathFlagRight){
-//            clearRightForwardStack();
-//        }
-//        rightStack.push(rightModel->rootPath());
-//        ui->rightView->setRootIndex(rightModel->setRootPath(ui->comboBoxRight->currentText()+"/"));
-//        ui->textEditRight->setText(ui->comboBoxRight->currentText()+"/");
-//        textEditRightCurrent = ui->textEditRight->text();
-//        rightCurrent = rightModel->rootPath();
-//    }
-//    else if(fileInfo.fileName()== ".."){
-//        if (restoredPathFlagRight){
-//            clearRightForwardStack();
-//        }
-//        rightStack.push(rightModel->rootPath());
-//        QDir dir = fileInfo.dir();
-//        dir.cdUp();
-//        ui->rightView->setRootIndex(rightModel->setRootPath(dir.absolutePath()));
-//        ui->textEditRight->setText(rightModel->rootPath());
-//        //if user goes to another disk
-//        ifUserGoesToAnotherDiskRight();
-
-//        textEditRightCurrent = ui->textEditRight->text();
-//        rightCurrent = rightModel->rootPath();
-//    }
-//    else if(fileInfo.isDir()){
-//        if (restoredPathFlagRight){
-//            clearRightForwardStack();
-//        }
-//        rightStack.push(rightModel->rootPath());
-//        ui->rightView->setRootIndex(rightModel->setRootPath(rightModel->filePath(index)));
-//        ui->textEditRight->setText(rightModel->rootPath());
-//        //if user goes to another disk
-//        ifUserGoesToAnotherDiskRight();
-
-//        textEditRightCurrent = ui->textEditRight->text();
-//        rightCurrent=rightModel->rootPath();
-//    }
-//    else if(fileInfo.isFile()){
-//        QString filePath = rightModel->fileInfo(index).absoluteFilePath();
-//        QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
-//    }
-}
-
-void UnderCommander::on_comboBoxLeft_activated(int index)
-{
-//    QString path = ui->comboBoxLeft->currentText() + "/";
-//    if (path != leftModel->rootPath()){
-//        clearLeftForwardStack();
-//        leftStack.push(leftModel->rootPath());
-//        ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//        leftCurrent = path;
-//        ui->textEditLeft->setText(path);
-//        if  (leftStack.count() >=1 && !ui->backLeft->isEnabled()){
-//            ui->backLeft->setEnabled(true);
-//        }
-//    }
-}
-
-void UnderCommander::on_comboBoxRight_activated(int index)
-{
-//    QString path = ui->comboBoxRight->currentText() + "/";
-//    if (path != rightModel->rootPath()){
-//        clearRightForwardStack();
-//        rightStack.push(rightModel->rootPath());
-//        ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//        rightCurrent = path;
-//        ui->textEditRight->setText(path);
-//        if  (rightStack.count() >=1 && !ui->backRight->isEnabled()){
-//            ui->backRight->setEnabled(true);
-//        }
-//    }
+    //rightController->open(index);
+    //ui->rightView->setRootIndex(index);
 }
 
 void UnderCommander::on_pushButtonLeft_clicked()
 {
     leftController->go(ui->textEditLeft->text());
-//    QString path = ui->textEditLeft->text();
-//    QDir dir(path);
-//    QFileInfo fileInfo = leftModel->fileInfo(leftModel->index(path));
-//    if (dir.exists() &&
-//            dir.absolutePath() != leftModel->rootPath() &&
-//            fileInfo.fileName() != "."
-//            && fileInfo.fileName() != "..")
-//    {
-//        clearLeftForwardStack();
-//        leftStack.push(leftModel->rootPath());
-//        ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//        leftCurrent = path;
-//        ui->textEditLeft->setText(path);
-//        QString comboPath;
-//        comboPath.push_back(path.at(0));
-//        comboPath.push_back(path.at(1));
-//        int index = ui->comboBoxLeft->findText(comboPath);
-//        ui->comboBoxLeft->setCurrentIndex(index);
-//        if  (leftStack.count() >=1 && !ui->backLeft->isEnabled()){
-//            ui->backLeft->setEnabled(true);
-//        }
-//    }
-//    else if (leftModel->fileInfo(leftModel->index(path)).isFile()){
-//        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
-//    }
-//    else if (dir.absolutePath() != leftModel->rootPath()){
-//        ui->textEditLeft->setText(textEditLeftCurrent);
-//        QApplication::beep();
-//        QMessageBox::warning(this, "UnderCommander",
-//                             "Can't find the path(left panel)."
-//                             " Check spelling and try again!");
-//    }
 }
 
 void UnderCommander::on_textEditLeft_textChanged()
@@ -831,251 +252,28 @@ void UnderCommander::on_textEditRight_textChanged()
 
 void UnderCommander::on_pushButtonRight_clicked()
 {
-//    QString path = ui->textEditRight->text();
-//    QDir dir(path);
-//    QFileInfo fileInfo = rightModel->fileInfo(rightModel->index(path));
-//    if (dir.exists() &&
-//            dir.absolutePath() != rightModel->rootPath() &&
-//            fileInfo.fileName() != "."
-//            && fileInfo.fileName() != "..")
-//    {
-//        clearRightForwardStack();
-//        rightStack.push(rightModel->rootPath());
-//        ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//        rightCurrent = path;
-//        ui->textEditRight->setText(path);
-//        QString comboPath;
-//        comboPath.push_back(path.at(0));
-//        comboPath.push_back(path.at(1));
-//        int index = ui->comboBoxRight->findText(comboPath);
-//        ui->comboBoxRight->setCurrentIndex(index);
-//        if  (rightStack.count() >=1 && !ui->backRight->isEnabled()){
-//            ui->backRight->setEnabled(true);
-//        }
-//    }
-//    else if (rightModel->fileInfo(rightModel->index(path)).isFile()){
-//        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
-//    }
-//    else if (dir.absolutePath() != rightModel->rootPath()){
-//        ui->textEditRight->setText(textEditRightCurrent);
-//        QApplication::beep();
-//        QMessageBox::warning(this, "UnderCommander",
-//                             "Can't find the path(right panel)."
-//                             " Check spelling and try again!");
-//    }
+    //rightController->go(ui->textEditRight->text());
 }
 
 void UnderCommander::on_backLeft_clicked()
 {
-//    if (!leftStack.isEmpty() && leftStack.count() != 1){
-//        QString path = leftStack.pop();
-//        if (!QDir(path).exists()){
-//            resetBackForwardLeft();
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Previous path does not exist!");
-//        }
-//        else{
-//            restoredPathFlagLeft = true;
-//            forwardLeftStack.push(leftModel->rootPath());
-//            if (forwardLeftStack.count() > 0 && !ui->forwardLeft->isEnabled()){
-//                ui->forwardLeft->setEnabled(true);
-//            }
-//            ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//            ui->textEditLeft->setText(path);
-//            //if user goes to another disk
-//            ifUserGoesToAnotherDiskLeft();
-
-//            textEditLeftCurrent = ui->textEditLeft->text();
-//            leftCurrent=leftModel->rootPath();
-//            if (leftStack.count() <= 1){
-//                ui->backLeft->setEnabled(false);
-//            }
-//        }
-//    }
     leftController->back();
 }
 
 void UnderCommander::on_backRight_clicked()
 {
-//    if (!rightStack.isEmpty() && rightStack.count() != 1){
-//        QString path = rightStack.pop();
-//        if (!QDir(path).exists()){
-//            resetBackForwardRight();
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Previous path does not exist!");
-//        }
-//        else{
-//            restoredPathFlagRight = true;
-//            forwardRightStack.push(rightModel->rootPath());
-//            if (forwardRightStack.count() > 0 && !ui->forwardRight->isEnabled()){
-//                ui->forwardRight->setEnabled(true);
-//            }
-//            ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//            ui->textEditRight->setText(path);
-//            //if user goes to another disk
-//            ifUserGoesToAnotherDiskRight();
-
-//            textEditRightCurrent = ui->textEditRight->text();
-//            rightCurrent=rightModel->rootPath();
-//            if (rightStack.count() <= 1){
-//                ui->backRight->setEnabled(false);
-//            }
-//        }
-//    }
+    //rightController->back();
 }
 
 
 void UnderCommander::on_forwardLeft_clicked()
 {
-//    if (!forwardLeftStack.isEmpty()){
-//        QString path = forwardLeftStack.pop();
-//        if (!QDir(path).exists()){
-//            resetBackForwardLeft();
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Path does not exist!");
-//        }
-//        else{
-//            restoredPathFlagLeft = true;
-//            if (forwardLeftStack.isEmpty()){
-//                ui->forwardLeft->setEnabled(false);
-//            }
-//            leftStack.push(leftModel->rootPath());
-//            ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//            ui->textEditLeft->setText(path);
-//            //if user goes to another disk
-//            ifUserGoesToAnotherDiskLeft();
-
-//            textEditLeftCurrent = ui->textEditRight->text();
-//            leftCurrent = leftModel->rootPath();
-//            if (leftStack.count() > 1 && !ui->backLeft->isEnabled()){
-//                ui->backLeft->setEnabled(true);
-//            }
-//            ui->textEditLeft->clearFocus();
-//            ui->textEditRight->clearFocus();
-//        }
-//    }
     leftController->forward();
 }
 
 void UnderCommander::on_forwardRight_clicked()
 {
-//    if (!forwardRightStack.isEmpty()){
-//        QString path = forwardRightStack.pop();
-//        if (!QDir(path).exists()){
-//            resetBackForwardRight();
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Path does not exist!");
-//        }
-//        else{
-//            restoredPathFlagRight = true;
-//            if (forwardRightStack.isEmpty()){
-//                ui->forwardRight->setEnabled(false);
-//            }
-//            rightStack.push(rightModel->rootPath());
-//            ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//            ui->textEditRight->setText(path);
-//            //if user goes to another disk
-//            ifUserGoesToAnotherDiskRight();
-
-//            textEditRightCurrent = ui->textEditRight->text();
-//            rightCurrent = rightModel->rootPath();
-//            if (rightStack.count() > 1 && !ui->backRight->isEnabled()){
-//                ui->backRight->setEnabled(true);
-//            }
-//            ui->textEditLeft->clearFocus();
-//            ui->textEditRight->clearFocus();
-//        }
-//    }
-}
-
-//Left context menu
-
-void UnderCommander::on_customMenuRequestedLeft(QPoint pos)
-{
-//    QModelIndex index = ui->leftView->indexAt(pos);
-//    QFileInfo fileInfo = leftModel->fileInfo(index);
-//    if (ui->leftView->selectionModel()->isSelected(index) && fileInfo.fileName() != "." && fileInfo.fileName() != ".."){
-//        leftPrintAction->setEnabled(true);
-//        if (!fileInfo.isFile()){
-//            leftPrintAction->setEnabled(false);
-//        }
-//        leftCopyAction->setEnabled(false);
-//        QModelIndexList list = ui->leftView->selectionModel()->selectedIndexes();
-//        bool atLeastOneFile = false;
-//        foreach (QModelIndex idx, list){
-//            if (leftModel->fileInfo(idx).isFile()){
-//                atLeastOneFile = true;
-//                break;
-//            }
-//        }
-//        if (atLeastOneFile){
-//            leftCopyAction->setEnabled(true);
-//        }
-//        leftPrintAction->setEnabled(false);
-//        if (fileInfo.completeSuffix() == "txt"){
-//            leftPrintAction->setEnabled(true);
-//        }
-//        leftPasteAction->setEnabled(false);
-//        if (fileInfo.isDir() && !copyPaths.isEmpty()){
-//            leftPasteAction->setEnabled(true);
-//        }
-//        leftPasteRootAction->setEnabled(false);
-//        if (!copyPaths.isEmpty()){
-//            leftPasteRootAction->setEnabled(true);
-//        }
-//        leftContextMenu->popup(ui->leftView->viewport()->mapToGlobal(pos));
-//        ui->textEditLeft->setText(leftModel->filePath(index));
-//    }
-//    else if (fileInfo.fileName() != "." && fileInfo.fileName() != "..")
-//    {
-//        smallLeftPasteAction->setEnabled(false);
-//        if (!copyPaths.isEmpty()){
-//            smallLeftPasteAction->setEnabled(true);
-//        }
-//        smallLeftContextMenu->popup(ui->leftView->viewport()->mapToGlobal(pos));
-//    }
-}
-
-void UnderCommander::leftContextOpen()
-{
-//    QModelIndex index = ui->leftView->currentIndex();
-//    QFileInfo fileInfo = leftModel->fileInfo(index);
-//    if (ui->leftView->selectionModel()->isSelected(index) && fileInfo.isDir())
-//    {
-//        if (leftStack.count() == stackLimit){
-//            leftStack.clear();
-//            leftStack.push(ui->comboBoxLeft->currentText()+"/");
-//            QMessageBox::information(this, "UnderCommander", "LeftStack limit reached, stack is cleared!");
-//        }
-//        if  (fileInfo.isDir() && leftStack.count() >=1 && !ui->backLeft->isEnabled()){
-//            ui->backLeft->setEnabled(true);
-//        }
-//        if (restoredPathFlagLeft){
-//            clearLeftForwardStack();
-//        }
-//        leftStack.push(leftModel->rootPath());
-//        ui->leftView->setRootIndex(leftModel->setRootPath(leftModel->filePath(index)));
-//        ui->textEditLeft->setText(leftModel->rootPath());
-//        //if user goes to another disk
-//        ifUserGoesToAnotherDiskLeft();
-
-//        textEditLeftCurrent = ui->textEditLeft->text();
-//        leftCurrent=leftModel->rootPath();
-//    }
-//    else if(ui->leftView->selectionModel()->isSelected(index) && fileInfo.isFile()){
-//        ui->textEditLeft->setText(leftModel->filePath(index));
-//        QString filePath = leftModel->fileInfo(index).absoluteFilePath();
-//        QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
-//    }
-}
-
-void UnderCommander::leftContextPrint()
-{
-//    QFileInfo fileInfo = leftModel->fileInfo(ui->leftView->currentIndex());
-//    QProcess *printProcess = new QProcess(this);
-//    QStringList arguments;
-//    arguments << "/p" << fileInfo.absoluteFilePath();
-//    printProcess->start("C:\\Windows\\notepad.exe", arguments);
+    //rightController->forward();
 }
 
 void UnderCommander::leftContextNewFile()
@@ -1399,13 +597,6 @@ void UnderCommander::leftContextDelete() //to do
 //    }
 }
 
-void UnderCommander::leftContextRename()
-{
-//    QModelIndex index = ui->leftView->currentIndex();
-//    ui->leftView->edit(index);
-//    ui->textEditLeft->setText(leftModel->rootPath());
-}
-
 void UnderCommander::leftContextInfo()
 {
     //displayLeft(ui->leftView->currentIndex());
@@ -1470,96 +661,6 @@ void UnderCommander::smallLeftContextNewFolder()
 void UnderCommander::smallLeftContextInfo()
 {
     //displayLeft(ui->leftView->rootIndex());
-}
-
-//Right context menu
-
-void UnderCommander::on_customMenuRequestedRight(QPoint pos)
-{
-//    QModelIndex index = ui->rightView->indexAt(pos);
-//    QFileInfo fileInfo = rightModel->fileInfo(index);
-//    if (ui->rightView->selectionModel()->isSelected(index) && fileInfo.fileName() != "." && fileInfo.fileName() != ".."){
-//        rightPrintAction->setEnabled(true);
-//        if (!fileInfo.isFile()){
-//            rightPrintAction->setEnabled(false);
-//        }
-//        rightCopyAction->setEnabled(false);
-//        QModelIndexList list = ui->rightView->selectionModel()->selectedIndexes();
-//        bool atLeastOneFile = false;
-//        foreach (QModelIndex idx, list){
-//            if (rightModel->fileInfo(idx).isFile()){
-//                atLeastOneFile = true;
-//                break;
-//            }
-//        }
-//        if (atLeastOneFile){
-//            rightCopyAction->setEnabled(true);
-//        }
-//        rightPrintAction->setEnabled(false);
-//        if (fileInfo.completeSuffix() == "txt"){
-//            rightPrintAction->setEnabled(true);
-//        }
-//        rightPasteAction->setEnabled(false);
-//        if (fileInfo.isDir() && !copyPaths.isEmpty()){
-//            rightPasteAction->setEnabled(true);
-//        }
-//        rightPasteRootAction->setEnabled(false);
-//        if (!copyPaths.isEmpty()){
-//            rightPasteRootAction->setEnabled(true);
-//        }
-//        rightContextMenu->popup(ui->rightView->viewport()->mapToGlobal(pos));
-//        ui->textEditRight->setText(rightModel->filePath(index));
-//    }
-//    else if (fileInfo.fileName() != "." && fileInfo.fileName() != "..")
-//    {
-//        smallRightPasteAction->setEnabled(false);
-//        if (!copyPaths.isEmpty()){
-//            smallRightPasteAction->setEnabled(true);
-//        }
-//        smallRightContextMenu->popup(ui->rightView->viewport()->mapToGlobal(pos));
-//    }
-}
-
-void UnderCommander::rightContextOpen()
-{
-//    QModelIndex index = ui->rightView->currentIndex();
-//    QFileInfo fileInfo = rightModel->fileInfo(index);
-//    if (ui->rightView->selectionModel()->isSelected(index) && fileInfo.isDir())
-//    {
-//        if (rightStack.count() == stackLimit){
-//            rightStack.clear();
-//            rightStack.push(ui->comboBoxRight->currentText()+"/");
-//            QMessageBox::information(this, "UnderCommander", "RightStack limit reached, stack is cleared!");
-//        }
-//        if  (fileInfo.isDir() && rightStack.count() >=1 && !ui->backRight->isEnabled()){
-//            ui->backRight->setEnabled(true);
-//        }
-//        if (restoredPathFlagRight){
-//            clearRightForwardStack();
-//        }
-//        rightStack.push(rightModel->rootPath());
-//        ui->rightView->setRootIndex(rightModel->setRootPath(rightModel->filePath(index)));
-//        ui->textEditRight->setText(rightModel->rootPath());
-//        //if user goes to another disk
-//        ifUserGoesToAnotherDiskRight();
-
-//        textEditRightCurrent = ui->textEditRight->text();
-//        rightCurrent=rightModel->rootPath();
-//    }
-//    else if(ui->rightView->selectionModel()->isSelected(index) && fileInfo.isFile()){
-//        ui->textEditRight->setText(rightModel->filePath(index));
-//        QString filePath = rightModel->fileInfo(index).absoluteFilePath();
-//        QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
-//    }
-}
-
-void UnderCommander::rightContextPrint()
-{
-//    QFileInfo fileInfo = rightModel->fileInfo(ui->rightView->currentIndex());
-//    QProcess *printProcess = new QProcess(this);
-//    QStringList arguments;
-//    arguments << "/p" << fileInfo.absoluteFilePath();
-//    printProcess->start("C:\\Windows\\notepad.exe", arguments);
 }
 
 void UnderCommander::rightContextNewFile()
@@ -1880,13 +981,6 @@ void UnderCommander::rightContextDelete()
 //            }
 //        }
 //    }
-}
-
-void UnderCommander::rightContextRename()
-{
-//    QModelIndex index = ui->rightView->currentIndex();
-//    ui->rightView->edit(index);
-//    ui->textEditRight->setText(rightModel->rootPath());
 }
 
 void UnderCommander::rightContextInfo()
@@ -2300,4 +1394,9 @@ void UnderCommander::on_actionEnable_type_column_2_triggered()
 void UnderCommander::on_comboBoxLeft_activated(const QString &arg1)
 {
     leftController->changeDrive(arg1);
+}
+
+void UnderCommander::on_comboBoxRight_activated(const QString &arg1)
+{
+    //rightController->changeDrive(arg1);
 }

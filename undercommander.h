@@ -49,12 +49,6 @@ private slots:
 
     void on_rightView_doubleClicked(const QModelIndex &index);
 
-    void on_comboBoxLeft_activated(int index);
-
-    void on_comboBoxRight_activated(int index);
-
-    void updateDiskList();
-
     void on_pushButtonLeft_clicked();
 
     void on_textEditLeft_textChanged();
@@ -67,18 +61,11 @@ private slots:
 
     void on_backRight_clicked();
 
-    void initBackForwardButtons();
-
     void on_forwardLeft_clicked();
 
     void on_forwardRight_clicked();
 
     //left context menu
-    void on_customMenuRequestedLeft(QPoint pos);
-
-    void leftContextOpen();
-
-    void leftContextPrint();
 
     void leftContextNewFile();
 
@@ -96,8 +83,6 @@ private slots:
 
     void leftContextDelete();
 
-    void leftContextRename();
-
     void leftContextInfo();
 
     void smallLeftContextNewFile();
@@ -107,12 +92,6 @@ private slots:
     void smallLeftContextInfo();
 
     //Right context menu
-
-    void on_customMenuRequestedRight(QPoint pos);
-
-    void rightContextOpen();
-
-    void rightContextPrint();
 
     void rightContextNewFile();
 
@@ -129,8 +108,6 @@ private slots:
     void rightContextPasteRoot();
 
     void rightContextDelete();
-
-    void rightContextRename();
 
     void rightContextInfo();
 
@@ -207,6 +184,8 @@ private slots:
 
     void on_comboBoxLeft_activated(const QString &arg1);
 
+    void on_comboBoxRight_activated(const QString &arg1);
+
 private:
     Ui::UnderCommander *ui;
 
@@ -218,6 +197,7 @@ private:
     ModelViewController *leftController;
     ModelViewController *rightController;
 
+    QString defaultPath;
     //QTimer *timer;
     //QString leftCurrent;
     //QString rightCurrent;

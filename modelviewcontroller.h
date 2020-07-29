@@ -13,6 +13,7 @@
 #include <QStack>
 #include <QMainWindow>
 #include <QDesktopServices>
+#include <QProcess>
 #include "fsview.h"
 #include "contextmenu.h"
 #include "smallcontextmenu.h"
