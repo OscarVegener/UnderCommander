@@ -1401,3 +1401,8 @@ void UnderCommander::on_comboBoxRight_activated(const QString &arg1)
 {
     //rightController->changeDrive(arg1);
 }
+
+void UnderCommander::on_leftView_activated(const QModelIndex &index)
+{
+    leftController->open(index);
+}

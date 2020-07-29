@@ -73,11 +73,13 @@ public:
     //basic functions
     void open(const QModelIndex index);
     void select(const QModelIndex index);
-    //void deselect(const QModelIndex index);
     void back();
     void forward();
     void go(const QString path);
     void changeDrive(const QString path);
+
+    //Resets all to basic state
+    void resetModelViewController(); //todo
 
 private:
 
@@ -134,6 +136,7 @@ private:
 
 private slots:
     void on_rootIndexChanged(const QModelIndex &index);
+    void on_currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void on_customMenuRequested(const QPoint &pos);
     void updateDiskList();
 
@@ -152,7 +155,6 @@ private slots:
     void contextInfo();
 
 signals:
-
     void rootIndexChanged(const QModelIndex &index);
     void indexErrorSignal(const QString &message);
     void ArgumentIsNullSignal(const QString &message);

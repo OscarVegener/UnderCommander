@@ -186,6 +186,8 @@ private slots:
 
     void on_comboBoxRight_activated(const QString &arg1);
 
+    void on_leftView_activated(const QModelIndex &index);
+
 private:
     Ui::UnderCommander *ui;
 
