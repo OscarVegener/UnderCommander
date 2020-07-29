@@ -17,6 +17,7 @@
 #include "fsview.h"
 #include "contextmenu.h"
 #include "smallcontextmenu.h"
+#include <QDebug>
 
 class ModelViewController : public QObject
 {
@@ -132,8 +133,8 @@ private:
     SmallContextMenu *smallConMenu;
 
 private slots:
+    void on_rootIndexChanged(const QModelIndex &index);
     void on_customMenuRequested(const QPoint &pos);
-    void on_rootPathChanged(const QString &newPath);
     void updateDiskList();
 
     //Context menu slots
@@ -152,12 +153,14 @@ private slots:
 
 signals:
 
-    void ArgumentIsNullSignal(QString message);
-    void IncorrectDefaultPathSignal(QString message);
-    void StatusBarMessageSignal(QString message);
-    void IncorrectIdSignal(QString message);
-    void StackLimitReachedSignal(QString message);
-    void WarningSignal(QString message);
+    void rootIndexChanged(const QModelIndex &index);
+    void indexErrorSignal(const QString &message);
+    void ArgumentIsNullSignal(const QString &message);
+    void IncorrectDefaultPathSignal(const QString &message);
+    void StatusBarMessageSignal(const QString &message);
+    void IncorrectIdSignal(const QString &message);
+    void StackLimitReachedSignal(const QString &message);
+    void WarningSignal(const QString &message);
 };
 
 #endif // MODELVIEWCONTROLLER_H

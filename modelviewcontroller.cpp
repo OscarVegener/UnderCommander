@@ -180,24 +180,52 @@ void ModelViewController::open(const QModelIndex index)
         if (restoredPathFlag){
             clearForwardStack();
         }
-        backStack.push(FsModel->rootPath());
-        FsModel->setRootPath(DriveBox->currentText()+"/");
+        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+        QModelIndex newIndex = FsModel->index(FsModel->rootPath());
+        FsViewModel->setRootIndex(newIndex);
+        emit rootIndexChanged(newIndex);
     }
     else if(fileInfo.fileName()== ".."){
         if (restoredPathFlag){
             clearForwardStack();
         }
-        backStack.push(FsModel->rootPath());
-        QDir dir = fileInfo.dir();
-        dir.cdUp();
-        FsModel->setRootPath(dir.absolutePath());
+        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+        QModelIndex newIndex = FsViewModel->rootIndex().parent();
+        FsViewModel->setRootIndex(newIndex);
+        emit rootIndexChanged(newIndex);
     }
+//    else if(fileInfo.isDir() && !fileInfo.isSymLink()){
+//        if (restoredPathFlag){
+//            clearForwardStack();
+//        }
+//        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+//        FsViewModel->setRootIndex(index);
+//        emit rootIndexChanged(index);
+//    }
+//    else if(fileInfo.isDir() && fileInfo.isSymLink()){
+//        if (restoredPathFlag){
+//            clearForwardStack();
+//        }
+//        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+//        QString comboPath;
+//        comboPath.push_back(fileInfo.canonicalFilePath().at(0));
+//        comboPath.push_back(fileInfo.canonicalFilePath().at(1));
+//        if (DriveBox->currentText() != comboPath){
+//            DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
+//        }
+//        FsModel->setRootPath(comboPath + "\\");
+//        QModelIndex newIndex = FsModel->index(fileInfo.canonicalFilePath());
+//        FsViewModel->setRootIndex(newIndex);
+//        emit rootIndexChanged(newIndex);
+//    }
     else if(fileInfo.isDir()){
         if (restoredPathFlag){
             clearForwardStack();
         }
-        backStack.push(FsModel->rootPath());
-        FsModel->setRootPath(FsModel->filePath(index));
+        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+        QModelIndex newIndex = FsModel->index(fileInfo.canonicalFilePath());
+        FsViewModel->setRootIndex(newIndex);
+        emit rootIndexChanged(newIndex);
     }
     else if(fileInfo.isFile()){
         openFile(FsModel->fileInfo(index).absoluteFilePath());
@@ -227,16 +255,20 @@ void ModelViewController::back()
         }
         else{
             restoredPathFlag = true;
-            forwardStack.push(FsModel->rootPath());
+            forwardStack.push(FsModel->filePath(FsViewModel->rootIndex()));
             if (forwardStack.count() > 0 && !ForwardButton->isEnabled()){
                 ForwardButton->setEnabled(true);
             }
-            FsModel->setRootPath(path);
+            QModelIndex index = FsModel->index(path);
+            FsViewModel->setRootIndex(index);
+            emit rootIndexChanged(index);
             if (backStack.count() <= 1){
                 BackButton->setEnabled(false);
             }
         }
     }
+    qDebug() << FsModel->filePath(FsViewModel->rootIndex());
+    qDebug() << FsModel->rootPath();
 }
 
 void ModelViewController::forward()
@@ -254,16 +286,20 @@ void ModelViewController::forward()
         }
         else{
             restoredPathFlag = true;
-            backStack.push(FsModel->rootPath());
+            backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
             if (forwardStack.isEmpty()){
                 ForwardButton->setEnabled(false);
             }
-            FsModel->setRootPath(path);
+            QModelIndex index = FsModel->index(path);
+            FsViewModel->setRootIndex(index);
+            emit rootIndexChanged(index);
             if (backStack.count() > 1 && !BackButton->isEnabled()){
                 BackButton->setEnabled(true);
             }
         }
     }
+    qDebug() << FsModel->filePath(FsViewModel->rootIndex());
+    qDebug() << FsModel->rootPath();
 }
 
 void ModelViewController::go(const QString path)
@@ -271,13 +307,22 @@ void ModelViewController::go(const QString path)
     QDir dir(path);
     QFileInfo fileInfo = FsModel->fileInfo(FsModel->index(path));
     if (dir.exists() &&
-            dir.absolutePath() != FsModel->rootPath() &&
-            fileInfo.fileName() != "."
-            && fileInfo.fileName() != "..")
+        dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex()) &&
+        fileInfo.fileName() != "." &&
+        fileInfo.fileName() != "..")
     {
         clearForwardStack();
-        backStack.push(FsModel->rootPath());
-        FsModel->setRootPath(path);
+        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+        QString comboPath;
+        comboPath.push_back(fileInfo.canonicalFilePath().at(0));
+        comboPath.push_back(fileInfo.canonicalFilePath().at(1));
+        if (DriveBox->currentText() != comboPath){
+            DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
+        }
+        FsModel->setRootPath(comboPath + "\\");
+        QModelIndex newIndex = FsModel->index(fileInfo.canonicalFilePath());
+        FsViewModel->setRootIndex(newIndex);
+        emit rootIndexChanged(newIndex);
         if  (backStack.count() >=1 && !BackButton->isEnabled()){
             BackButton->setEnabled(true);
         }
@@ -285,7 +330,7 @@ void ModelViewController::go(const QString path)
     else if (FsModel->fileInfo(FsModel->index(path)).isFile()){
         openFile(path);
     }
-    else if (dir.absolutePath() != FsModel->rootPath()){
+    else if (dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex())){
         DisplayedPathLineEdit->setText(displayedPathCurrent);
         emit WarningSignal(createIdMessage("Can't find the path provided. Check spelling and try again!"));
     }
@@ -296,8 +341,11 @@ void ModelViewController::changeDrive(const QString path)
     QString newPath = path + "/";
     if (newPath != FsModel->rootPath()){
         clearForwardStack();
-        backStack.push(FsModel->rootPath());
+        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
         FsModel->setRootPath(newPath);
+        QModelIndex newIndex = FsModel->index(path);
+        FsViewModel->setRootIndex(newIndex);
+        emit rootIndexChanged(newIndex);
         if  (backStack.count() >=1 && !BackButton->isEnabled()){
             BackButton->setEnabled(true);
         }
@@ -350,13 +398,13 @@ void ModelViewController::initDriveModel()
 
 void ModelViewController::initFsModel()
 {
-    connect(FsModel, &QFileSystemModel::rootPathChanged, this, &ModelViewController::on_rootPathChanged);
     FsModel->setReadOnly(false);
     FsViewModel->setModel(FsModel);
     FsViewModel->setRootIndex(FsModel->setRootPath(DefaultPath));
     FsModel->setFilter(QDir::AllEntries);
     backStack.push(DefaultPath);
 
+    connect(this, &ModelViewController::rootIndexChanged, this, &ModelViewController::on_rootIndexChanged);
     FsViewModel->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(FsViewModel, &FSView::customContextMenuRequested, this, &ModelViewController::on_customMenuRequested);
     FsViewModel->setDragEnabled(true);
@@ -396,6 +444,21 @@ void ModelViewController::initBackForwardNavigation()
 {
     BackButton->setEnabled(false);
     ForwardButton->setEnabled(false);
+}
+
+void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
+{
+    QString newPath = FsModel->filePath(index);
+    DisplayedPathLineEdit->setText(newPath);
+    QString comboPath;
+    comboPath.push_back(newPath.at(0));
+    comboPath.push_back(newPath.at(1));
+    if (DriveBox->currentText() != comboPath){
+        DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
+        FsModel->setRootPath(comboPath + "\\");
+    }
+    displayedPathCurrent = DisplayedPathLineEdit->text();
+    currentPath = newPath;
 }
 
 void ModelViewController::on_customMenuRequested(const QPoint &pos)
@@ -454,20 +517,6 @@ void ModelViewController::on_customMenuRequested(const QPoint &pos)
         }
         smallConMenu->getMenu()->popup(FsViewModel->viewport()->mapToGlobal(pos));
     }
-}
-
-void ModelViewController::on_rootPathChanged(const QString &newPath)
-{
-    FsViewModel->setRootIndex(FsModel->index(FsModel->rootPath()));
-    DisplayedPathLineEdit->setText(FsModel->rootPath());
-    QString comboPath;
-    comboPath.push_back(newPath.at(0));
-    comboPath.push_back(newPath.at(1));
-    if (DriveBox->currentText() != comboPath){
-        DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
-    }
-    displayedPathCurrent = DisplayedPathLineEdit->text();
-    currentPath = FsModel->rootPath();
 }
 
 void ModelViewController::updateDiskList()

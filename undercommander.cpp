@@ -47,6 +47,7 @@ UnderCommander::UnderCommander(QWidget *parent)
 
 UnderCommander::~UnderCommander()
 {
+    //delete leftController;
     delete ui;
 }
 
