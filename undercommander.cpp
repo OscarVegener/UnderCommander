@@ -221,11 +221,6 @@ void UnderCommander::on_rightView_clicked(const QModelIndex &index)
     //rightController->select(index);
 }
 
-void UnderCommander::on_leftView_doubleClicked(const QModelIndex &index)
-{
-    leftController->open(index);
-}
-
 void UnderCommander::on_rightView_doubleClicked(const QModelIndex &index)
 {
     //rightController->open(index);
@@ -235,20 +230,6 @@ void UnderCommander::on_rightView_doubleClicked(const QModelIndex &index)
 void UnderCommander::on_pushButtonLeft_clicked()
 {
     leftController->go(ui->textEditLeft->text());
-}
-
-void UnderCommander::on_textEditLeft_textChanged()
-{
-   //ui->textEditLeft->setTextColor(textEditLeftColor);
-   //ui->textEditLeft->setCurrentFont(textEditLeftFont);
-    ui->textEditLeft->clearFocus();
-}
-
-void UnderCommander::on_textEditRight_textChanged()
-{
-    //ui->textEditRight->setTextColor(textEditRightColor);
-    //ui->textEditRight->setCurrentFont(textEditRightFont);
-    ui->textEditRight->clearFocus();
 }
 
 void UnderCommander::on_pushButtonRight_clicked()
@@ -1406,3 +1387,4 @@ void UnderCommander::on_leftView_activated(const QModelIndex &index)
 {
     leftController->open(index);
 }
+

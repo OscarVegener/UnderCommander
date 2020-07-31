@@ -285,35 +285,41 @@ void ModelViewController::forward()
 
 void ModelViewController::go(const QString path)
 {
-    QDir dir(path);
-    QFileInfo fileInfo = FsModel->fileInfo(FsModel->index(path));
-    if (dir.exists() &&
-        dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex()) &&
-        fileInfo.fileName() != "." &&
-        fileInfo.fileName() != "..")
-    {
-        clearForwardStack();
-        backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
-        QString comboPath;
-        comboPath.push_back(fileInfo.canonicalFilePath().at(0));
-        comboPath.push_back(fileInfo.canonicalFilePath().at(1));
-        if (DriveBox->currentText() != comboPath){
-            DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
+    if(!path.isNull() || !path.isEmpty()){
+        QDir dir(path);
+        QFileInfo fileInfo = FsModel->fileInfo(FsModel->index(path));
+        if (dir.exists() &&
+            dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex()) &&
+            fileInfo.fileName() != "." &&
+            fileInfo.fileName() != "..")
+        {
+            clearForwardStack();
+            backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
+            QString comboPath;
+            comboPath.push_back(fileInfo.canonicalFilePath().at(0));
+            comboPath.push_back(fileInfo.canonicalFilePath().at(1));
+            if (DriveBox->currentText() != comboPath){
+                DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
+            }
+            FsModel->setRootPath(comboPath + "\\");
+            QModelIndex newIndex = FsModel->index(fileInfo.canonicalFilePath());
+            FsViewModel->setRootIndex(newIndex);
+            emit rootIndexChanged(newIndex);
+            if  (backStack.count() >=1 && !BackButton->isEnabled()){
+                BackButton->setEnabled(true);
+            }
         }
-        FsModel->setRootPath(comboPath + "\\");
-        QModelIndex newIndex = FsModel->index(fileInfo.canonicalFilePath());
-        FsViewModel->setRootIndex(newIndex);
-        emit rootIndexChanged(newIndex);
-        if  (backStack.count() >=1 && !BackButton->isEnabled()){
-            BackButton->setEnabled(true);
+        else if (FsModel->fileInfo(FsModel->index(path)).isFile()){
+            openFile(path);
+        }
+        else if (dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex())){
+            DisplayedPathLineEdit->setText(displayedPathCurrent);
+            emit WarningSignal(createIdMessage("Can't find the path provided. Check spelling and try again!"));
         }
     }
-    else if (FsModel->fileInfo(FsModel->index(path)).isFile()){
-        openFile(path);
-    }
-    else if (dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex())){
+    else{
         DisplayedPathLineEdit->setText(displayedPathCurrent);
-        emit WarningSignal(createIdMessage("Can't find the path provided. Check spelling and try again!"));
+        emit ArgumentIsInvalid(createIdMessage("Argument for \"go\" function is invalid."));
     }
 }
 
@@ -338,7 +344,7 @@ void ModelViewController::resetModelViewController()
 
 }
 
-void ModelViewController::openFile(const QString path)
+void ModelViewController::openFile(const QString &path)
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
@@ -389,7 +395,9 @@ void ModelViewController::initFsModel()
     FsViewModel->setRootIndex(FsModel->setRootPath(DefaultPath));
     FsModel->setFilter(QDir::AllEntries);
     backStack.push(DefaultPath);
-
+    currentPath = DefaultPath;
+    displayedPathCurrent = DefaultPath;
+    DisplayedPathLineEdit->setText(DefaultPath);
     connect(FsViewModel->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModelViewController::on_currentChanged);
     connect(this, &ModelViewController::rootIndexChanged, this, &ModelViewController::on_rootIndexChanged);
     FsViewModel->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -435,23 +443,34 @@ void ModelViewController::initBackForwardNavigation()
 
 void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
 {
-    if (index.isValid()){
-        QString newPath = FsModel->filePath(index);
-        DisplayedPathLineEdit->setText(newPath);
-        QString comboPath;
-        comboPath.push_back(newPath.at(0));
-        comboPath.push_back(newPath.at(1));
-        if (DriveBox->currentText() != comboPath){
-            DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
-            FsModel->setRootPath(comboPath + "\\");
-        }
-        displayedPathCurrent = DisplayedPathLineEdit->text();
-        currentPath = newPath;
+if (index.isValid()){
+    QString newPath = FsModel->filePath(index);
+    DisplayedPathLineEdit->setText(newPath);
+    QString comboPath;
+    comboPath.push_back(newPath.at(0));
+    comboPath.push_back(newPath.at(1));
+    qDebug() << "RootPath: " << FsModel->rootPath();
+    qDebug() << "ComboPath: " << comboPath;
+    if (FsModel->rootPath() != (comboPath + "/")){
+        FsModel->setRootPath(comboPath + "/");
     }
-    else{
-        emit indexErrorSignal(createIdMessage("Index error happened."));
+    if (DriveBox->currentText() != comboPath){
+        int driveIndex;
+        if((driveIndex =  DriveBox->findText(comboPath)) != -1){
+            qDebug() << "DriveIndex: "<< driveIndex;
+            DriveBox->setCurrentIndex(driveIndex);
+        }
+        else{
+            emit indexErrorSignal(createIdMessage("Can't find index for current drive."));
+        }
     }
 
+    displayedPathCurrent = DisplayedPathLineEdit->text();
+    currentPath = newPath;
+}
+else{
+    emit indexErrorSignal(createIdMessage("Index error happened when changing root"));
+}
 }
 
 void ModelViewController::on_currentChanged(const QModelIndex &current, const QModelIndex &previous)

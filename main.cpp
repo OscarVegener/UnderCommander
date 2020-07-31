@@ -9,5 +9,12 @@ int main(int argc, char *argv[])
     a.setStyle(QStyleFactory::create("Fusion"));
     UnderCommander w;
     w.show();
-    return a.exec();
+    int ret;
+    try{
+        ret = a.exec();
+    }
+    catch (const std::bad_alloc &){
+        return EXIT_FAILURE;
+    }
+    return ret;
 }

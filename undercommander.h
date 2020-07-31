@@ -41,19 +41,11 @@ public:
     UnderCommander(QWidget *parent = nullptr);
     ~UnderCommander();
 private slots:
-    void on_leftView_clicked(const QModelIndex &index);
-
     void on_rightView_clicked(const QModelIndex &index);
-
-    void on_leftView_doubleClicked(const QModelIndex &index);
 
     void on_rightView_doubleClicked(const QModelIndex &index);
 
     void on_pushButtonLeft_clicked();
-
-    void on_textEditLeft_textChanged();
-
-    void on_textEditRight_textChanged();
 
     void on_pushButtonRight_clicked();
 
@@ -187,6 +179,8 @@ private slots:
     void on_comboBoxRight_activated(const QString &arg1);
 
     void on_leftView_activated(const QModelIndex &index);
+
+    void on_leftView_clicked(const QModelIndex &index);
 
 private:
     Ui::UnderCommander *ui;

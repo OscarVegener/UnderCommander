@@ -83,7 +83,7 @@ public:
 
 private:
 
-    void openFile(const QString path);
+    void openFile(const QString &path);
 
     QFileSystemModel *FsModel;
     QDirModel *DriveModel;
@@ -93,10 +93,10 @@ private:
     QPushButton *BackButton;
     QPushButton *GoButton;
     FSView *FsViewModel;
-    static int count;
-    int Id;
-    QMainWindow *Window;
     QString DefaultPath;
+    int Id;
+    static int count;
+    QMainWindow *Window;
     QString createIdMessage(QString m);
 
     QString currentPath;
@@ -158,6 +158,7 @@ signals:
     void rootIndexChanged(const QModelIndex &index);
     void indexErrorSignal(const QString &message);
     void ArgumentIsNullSignal(const QString &message);
+    void ArgumentIsInvalid(const QString &message);
     void IncorrectDefaultPathSignal(const QString &message);
     void StatusBarMessageSignal(const QString &message);
     void IncorrectIdSignal(const QString &message);
