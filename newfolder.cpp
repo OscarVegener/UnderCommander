@@ -16,7 +16,6 @@ newfolder::newfolder(QWidget *parent) :
 newfolder::~newfolder()
 {
     delete regExp;
-    delete regExpValidator;
     delete ui;
 }
 

@@ -6,7 +6,7 @@
 #include <QValidator>
 #include <QRegExpValidator>
 #include <QRegExp>
-#include "undercommander.h"
+//#include "undercommander.h"
 
 namespace Ui {
 class newfile;

@@ -133,7 +133,7 @@ private:
     //Context menu
     ContextMenu *conMenu;
     SmallContextMenu *smallConMenu;
-
+    
 
 private slots:
     void on_rootIndexChanged(const QModelIndex &index);

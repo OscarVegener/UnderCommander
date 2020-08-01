@@ -566,12 +566,86 @@ void ModelViewController::contextPrint()
 
 void ModelViewController::contextNewFile()
 {
-
+    QModelIndex index = FsViewModel->currentIndex();
+    QFileInfo fileInfo = FsModel->fileInfo(index);
+    newfile window;
+    window.setModal(true);
+    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    window.exec();
+    if (window.isAccepted()){
+        if (fileInfo.isFile()){
+            QString newFileName = FsModel->filePath(FsViewModel->rootIndex()) + "/" + window.getFileName();
+            qDebug() << "FileName isFile: " << newFileName;
+            if (QFile::exists(newFileName)){
+                emit creatingFileErrorSignal(createIdMessage("File " + newFileName + " already exists."));
+            }
+            else {
+                QFile file(newFileName);
+                if (file.open(QIODevice::WriteOnly)){
+                    file.close();
+                }
+                else{
+                    emit creatingFileErrorSignal(createIdMessage("File " + newFileName + "was not created. Probably you don't have permission."));
+                }
+            }
+        }
+        else if(fileInfo.isDir()){
+            QString newFileName = FsModel->filePath(index) + "/" + window.getFileName();
+            qDebug() << "FileName isDir: " << newFileName;
+            if (QFile::exists(newFileName)){
+                emit creatingFileErrorSignal(createIdMessage("File " + newFileName + " already exists."));
+            }
+            else {
+                QFile file(newFileName);
+                if (file.open(QIODevice::WriteOnly)){
+                    file.close();
+                }
+                else{
+                    emit creatingFileErrorSignal(createIdMessage("File " + newFileName + "was not created. Probably you don't have permission."));
+                }
+            }
+        }
+    }
 }
 
 void ModelViewController::contextNewFolder()
 {
-
+    QModelIndex index = FsViewModel->currentIndex();
+    QFileInfo fileInfo = FsModel->fileInfo(index);
+    newfolder window;
+    window.setModal(true);
+    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    window.exec();
+    if (window.isAccepted()){
+        if (fileInfo.isFile()){
+            QString newFolderName = FsModel->filePath(FsViewModel->rootIndex()) + "/" + window.getPathName();
+            qDebug() << "FolderName isFile: " << newFolderName;
+            if (QDir(newFolderName).exists()){
+                emit creatingFolderErrorSignal(createIdMessage("Folder " + newFolderName + " already exists."));
+            }
+            else{
+                QDir currentDir(FsModel->filePath(FsViewModel->rootIndex()));
+                if (!currentDir.mkdir(window.getPathName())){
+                    emit creatingFolderErrorSignal(createIdMessage("FFolder " + newFolderName + "was not created."
+                                                                                                " Probably you don't have permission."));
+                }
+            }
+        }
+        else if(fileInfo.isDir()){
+            QString newFolderName = FsModel->filePath(FsViewModel->currentIndex()) + "/" + window.getPathName();
+            qDebug() << "FolderName isDir: " << newFolderName;
+            if (QDir(newFolderName).exists()){
+                emit creatingFolderErrorSignal(createIdMessage("Folder " + newFolderName + " already exists."));
+            }
+            else{
+                QDir parentDir(FsModel->filePath(index));
+                if (!parentDir.mkdir(window.getPathName())){
+                    emit creatingFolderErrorSignal(createIdMessage("FFolder " + newFolderName + "was not created."
+                                                                                                " Probably you don't have permission."));
+                }
+            }
+        }
+    }
 }
 
 void ModelViewController::contextCut()
