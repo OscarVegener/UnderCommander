@@ -47,6 +47,7 @@ void CopyWorker::start_moving()
     qDebug() << "moving";
     remove_all(source.toStdString(), error_delete);
     emit copying_finished();
+
     QString string_copy;
     QString string_delete;
     string_copy.fromStdString(error_copy.message());

@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QThread>
 #include <QMessageBox>
+#include <QCloseEvent>
 #include "copyworker.h"
 
 namespace Ui {
@@ -26,19 +27,21 @@ public:
         options = op;
     }
 
+    virtual void closeEvent(QCloseEvent *e) override;
+
 public slots:
     void copying_finished_slot();
     void setSkip(bool skip)
     {
         if (m_skip == skip)
             return;
-
         m_skip = skip;
         emit skipChanged(m_skip);
     }
 
 signals:
     void skipChanged(bool skip);
+    void ArgumentIsInvalid(const QString &message);
 
 private:
     Ui::CopyingStatusWindow *ui;
@@ -46,6 +49,9 @@ private:
     QThread *thread;
     CopyWorker *worker;
     bool m_skip;
+    QString windowTitle = "Copying files...";
+    bool CutFlag;
+    bool copyingFinished = false;
 };
 
 #endif // COPYINGSTATUSWINDOW_H

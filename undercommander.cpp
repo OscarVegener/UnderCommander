@@ -47,44 +47,8 @@ UnderCommander::UnderCommander(QWidget *parent)
 
 UnderCommander::~UnderCommander()
 {
-    //delete leftController;
     delete ui;
 }
-
-//copy_options UnderCommander::askForCopyOptions()
-//{
-//    copy_options options = copy_options::recursive;
-//    QMessageBox::StandardButton reply;
-//    reply = QMessageBox::question(this, "Copying files...", "Overwrite existing files?", QMessageBox::Yes | QMessageBox::No);
-//    if (reply == QMessageBox::Yes){
-//        options = options | copy_options::overwrite_existing;
-//    }
-//    else{
-//        reply = QMessageBox::question(this, "Copying files...", "Update existing files"
-//                                                                "(replace the existing file only if it is older than the file being copied)?",
-//                                      QMessageBox::Yes | QMessageBox::No);
-//        if (reply == QMessageBox::Yes){
-//            options = options | copy_options::update_existing;
-//        }
-//        else{
-//            options = options | copy_options::skip_existing;
-//        }
-//    }
-//    reply = QMessageBox::question(this, "Copying files...", "Copy simlinks?", QMessageBox::Yes | QMessageBox::No);
-//    if (reply == QMessageBox::Yes){
-//        options = options | copy_options::copy_symlinks;
-//    }
-//    else{
-//        reply = QMessageBox::question(this, "Copying files...", "Create simlinks instead of copying?", QMessageBox::Yes | QMessageBox::No);
-//        if (reply == QMessageBox::Yes){
-//            options = options | copy_options::create_symlinks;
-//        }
-//        else{
-//            options = options | copy_options::skip_symlinks;
-//        }
-//    }
-//    return options;
-//}
 
 //void UnderCommander::displayLeft(QModelIndex index)
 //{
@@ -260,103 +224,10 @@ void UnderCommander::on_forwardRight_clicked()
 
 void UnderCommander::leftContextNewFile()
 {
-//    QModelIndex index = ui->leftView->currentIndex();
-//    QFileInfo fileInfo = leftModel->fileInfo(index);
-//    newfile window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        if (fileInfo.isFile()){
-//            newFileName = leftModel->rootPath() + "/" + window.getFileName();
-//            if (QFile::exists(newFileName)){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "File already exists!");
-//            }
-//            else {
-//                QFile file(newFileName);
-//                if (file.open(QIODevice::WriteOnly)){
-//                    //ui->textEdit->setText("Succesfully: " + file.fileName());
-//                    file.close();
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "File was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("File was not created");
-//                }
-//            }
-//        }
-//        else if(fileInfo.isDir()){
-//            newFileName = leftModel->filePath(index) + "/" + window.getFileName();
-//            if (QFile::exists(newFileName)){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "File already exists!");
-//            }
-//            else {
-//                QFile file(newFileName);
-//                if (file.open(QIODevice::WriteOnly)){
-//                    //ui->textEdit->setText("Succesfully: " + file.fileName());
-//                    file.close();
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "File was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("File was not created");
-//                }
-//            }
-//        }
-//    }
-    //else ui->textEdit->setText("Not accepted");
 }
 
 void UnderCommander::leftContextNewFolder()
 {
-//    QModelIndex index = ui->leftView->currentIndex();
-//    QFileInfo fileInfo = leftModel->fileInfo(index);
-//    newfolder window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        if (fileInfo.isFile()){
-//            newFolderName = window.getPathName();
-//            if (QDir(leftModel->rootPath() + "/" + newFolderName).exists()){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "Folder already exists!");
-//            }
-//            else{
-//                QDir currentDir(leftModel->rootPath());
-//                //ui->textEdit->setText(currentDir.absolutePath());
-//                if (currentDir.mkdir(newFolderName)){
-//                    //ui->textEdit->setText(currentDir.absolutePath() +"/" + newFolderName);
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "Folder was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("Folder was not created");
-//                }
-//            }
-//        }
-//        else if(fileInfo.isDir()){
-//            newFolderName = window.getPathName();
-//            if (QDir(leftModel->filePath(index) + "/" + newFolderName).exists()){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "Folder already exists!");
-//            }
-//            else{
-//                QDir currentDir(leftModel->filePath(index));
-//                //ui->textEdit->setText(currentDir.absolutePath());
-//                if (currentDir.mkdir(newFolderName)){
-//                    //ui->textEdit->setText(currentDir.absolutePath() +"/" + newFolderName);
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "Folder was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("Folder was not created");
-//                }
-//            }
-//        }
-//    }
 }
 
 void UnderCommander::leftContextCut()
@@ -388,19 +259,7 @@ void UnderCommander::leftContextCopyFolderFiles()
 
 void UnderCommander::leftContextPaste()
 {
-//    QModelIndex index = ui->leftView->currentIndex();
-//    QString dest = leftModel->fileInfo(index).absoluteFilePath();
-//    copy_options options = askForCopyOptions();
-//    foreach (QString item, copyPaths){
-//        if (exists(item.toStdString())){
-//            CopyingStatusWindow *window = new CopyingStatusWindow(item, dest, contextCutFlag);
-//            window->setOptions(options);
-//            window->setSkip(true);
-//            window->setModal(true);
-//            window->setAttribute(Qt::WA_DeleteOnClose);
-//            window->exec();
-//        }
-//    }
+
 }
 
 void UnderCommander::leftContextPasteRoot()

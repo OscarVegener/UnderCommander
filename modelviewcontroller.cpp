@@ -12,6 +12,7 @@ ModelViewController::ModelViewController(QFileSystemModel *fsModel,
                                     QString defaultPath,
                                     QObject *parent) : QObject(parent)
 {
+    Id = count++;
     if (fsModel != nullptr &&
         driveModel != nullptr &&
         displayedPath != nullptr &&
@@ -33,15 +34,14 @@ ModelViewController::ModelViewController(QFileSystemModel *fsModel,
         Window = window;
     }
     else{
-        emit ArgumentIsNullSignal("Some arguments in ModelViewController's constructor is Null.");
+        emit ArgumentIsNullSignal(createIdMessage("Some arguments in ModelViewController's constructor is Null."));
     }
     if (!defaultPath.isNull() && QDir(defaultPath).exists()){
         DefaultPath = defaultPath;
     }
     else{
-        emit IncorrectDefaultPathSignal("Current default path does not exist.");
+        emit IncorrectDefaultPathSignal(createIdMessage("Current default path does not exist."));
     }
-    Id = count++;
     initFsModel();
     initDriveModel();
     initContextMenus();
@@ -49,6 +49,10 @@ ModelViewController::ModelViewController(QFileSystemModel *fsModel,
 }
 
 int ModelViewController::count = 0;
+
+bool ModelViewController::contextCutFlag = 0;
+
+QStringList ModelViewController::copyPaths;
 
 QFileSystemModel *ModelViewController::getFsModel() const
 {
@@ -349,9 +353,26 @@ void ModelViewController::openFile(const QString &path)
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
+void ModelViewController::pasteToRoot(const QString &root)
+{
+    if(exists(root.toStdString())){
+        copy_options options = askForCopyOptions();
+        foreach (QString source, copyPaths){
+            if (exists(source.toStdString())){
+                CopyingStatusWindow *window = new CopyingStatusWindow(source, root, contextCutFlag);
+                window->setOptions(options);
+                window->setSkip(true);
+                window->setModal(true);
+                window->setAttribute(Qt::WA_DeleteOnClose);
+                window->exec();
+            }
+        }
+    }
+}
+
 QString ModelViewController::createIdMessage(QString m)
 {
-    return "{" + QString::number(Id) + "} " + m;
+    return "{Id: " + QString::number(Id) + "} " + m;
 }
 
 void ModelViewController::clearForwardStack()
@@ -408,7 +429,6 @@ void ModelViewController::initFsModel()
     FsViewModel->init();
 }
 
-//todo
 void ModelViewController::initContextMenus()
 {
     //ContextMenu
@@ -425,7 +445,6 @@ void ModelViewController::initContextMenus()
     connect(conMenu->getDeleteAction(), &QAction::triggered, this, &ModelViewController::contextDelete);
     connect(conMenu->getRenameAction(), &QAction::triggered, this, &ModelViewController::contextRename);
     connect(conMenu->getInfoAction(), &QAction::triggered, this, &ModelViewController::contextInfo);
-
     //SmallContextMenu
     smallConMenu = new SmallContextMenu(this);
     connect(smallConMenu->getNewFileAction(), &QAction::triggered, this, &ModelViewController::contextNewFile);
@@ -441,36 +460,70 @@ void ModelViewController::initBackForwardNavigation()
     ForwardButton->setEnabled(false);
 }
 
-void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
+copy_options ModelViewController::askForCopyOptions()
 {
-if (index.isValid()){
-    QString newPath = FsModel->filePath(index);
-    DisplayedPathLineEdit->setText(newPath);
-    QString comboPath;
-    comboPath.push_back(newPath.at(0));
-    comboPath.push_back(newPath.at(1));
-    qDebug() << "RootPath: " << FsModel->rootPath();
-    qDebug() << "ComboPath: " << comboPath;
-    if (FsModel->rootPath() != (comboPath + "/")){
-        FsModel->setRootPath(comboPath + "/");
+    copy_options options = copy_options::recursive;
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(Window, "Copying files...", "Overwrite existing files?", QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes){
+        options = options | copy_options::overwrite_existing;
     }
-    if (DriveBox->currentText() != comboPath){
-        int driveIndex;
-        if((driveIndex =  DriveBox->findText(comboPath)) != -1){
-            qDebug() << "DriveIndex: "<< driveIndex;
-            DriveBox->setCurrentIndex(driveIndex);
+    else{
+        reply = QMessageBox::question(Window, "Copying files...", "Update existing files"
+                                                                "(replace the existing file only if it is older than the file being copied)?",
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes){
+            options = options | copy_options::update_existing;
         }
         else{
-            emit indexErrorSignal(createIdMessage("Can't find index for current drive."));
+            options = options | copy_options::skip_existing;
         }
     }
+    reply = QMessageBox::question(Window, "Copying files...", "Copy simlinks?", QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes){
+        options = options | copy_options::copy_symlinks;
+    }
+    else{
+        reply = QMessageBox::question(Window, "Copying files...", "Create simlinks instead of copying?", QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes){
+            options = options | copy_options::create_symlinks;
+        }
+        else{
+            options = options | copy_options::skip_symlinks;
+        }
+    }
+    return options;
+}
 
-    displayedPathCurrent = DisplayedPathLineEdit->text();
-    currentPath = newPath;
-}
-else{
-    emit indexErrorSignal(createIdMessage("Index error happened when changing root"));
-}
+void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
+{
+    if (index.isValid()){
+        QString newPath = FsModel->filePath(index);
+        DisplayedPathLineEdit->setText(newPath);
+        QString comboPath;
+        comboPath.push_back(newPath.at(0));
+        comboPath.push_back(newPath.at(1));
+        qDebug() << "RootPath: " << FsModel->rootPath();
+        qDebug() << "ComboPath: " << comboPath;
+        if (FsModel->rootPath() != (comboPath + "/")){
+            FsModel->setRootPath(comboPath + "/");
+        }
+        if (DriveBox->currentText() != comboPath){
+            int driveIndex;
+            if((driveIndex =  DriveBox->findText(comboPath)) != -1){
+                qDebug() << "DriveIndex: "<< driveIndex;
+                DriveBox->setCurrentIndex(driveIndex);
+            }
+            else{
+                emit indexErrorSignal(createIdMessage("Can't find index for current drive."));
+            }
+        }
+        displayedPathCurrent = DisplayedPathLineEdit->text();
+        currentPath = newPath;
+    }
+    else{
+        emit indexErrorSignal(createIdMessage("Index error happened when changing root"));
+    }
 }
 
 void ModelViewController::on_currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -650,12 +703,24 @@ void ModelViewController::contextNewFolder()
 
 void ModelViewController::contextCut()
 {
-
+    contextCutFlag = true;
+    copyPaths.clear();
+    QModelIndexList list = FsViewModel->selectionModel()->selectedRows();
+    foreach (QModelIndex index, list){
+        copyPaths.push_back(FsModel->fileInfo(index).absoluteFilePath());
+    }
+    qDebug() << copyPaths;
 }
 
 void ModelViewController::contextCopy()
 {
-
+    contextCutFlag = false;
+    copyPaths.clear();
+    QModelIndexList list = FsViewModel->selectionModel()->selectedRows();
+    foreach (QModelIndex index, list){
+        copyPaths.push_back(FsModel->fileInfo(index).absoluteFilePath());
+    }
+    qDebug() << copyPaths;
 }
 
 void ModelViewController::contextCopyToClipboard()
@@ -665,12 +730,30 @@ void ModelViewController::contextCopyToClipboard()
 
 void ModelViewController::contextPaste()
 {
-
+    QModelIndex index = FsViewModel->currentIndex();
+    QFileInfo fileInfo = FsModel->fileInfo(index);
+    if (fileInfo.isFile()){
+        pasteToRoot(FsModel->filePath(FsViewModel->rootIndex()));
+    }
+    else if(fileInfo.isDir()){
+        QString dest = fileInfo.absoluteFilePath();
+        copy_options options = askForCopyOptions();
+        foreach (QString source, copyPaths){
+            if (exists(source.toStdString())){
+                CopyingStatusWindow *window = new CopyingStatusWindow(source, dest, contextCutFlag);
+                window->setOptions(options);
+                window->setSkip(true);
+                window->setModal(true);
+                window->setAttribute(Qt::WA_DeleteOnClose);
+                window->exec();
+            }
+        }
+    }
 }
 
 void ModelViewController::contextPasteToRoot()
 {
-
+    pasteToRoot(FsModel->filePath(FsViewModel->rootIndex()));
 }
 
 void ModelViewController::contextDelete()

@@ -14,11 +14,13 @@
 #include <QMainWindow>
 #include <QDesktopServices>
 #include <QProcess>
+#include <QMessageBox>
 #include "fsview.h"
 #include "contextmenu.h"
 #include "smallcontextmenu.h"
 #include "newfile.h"
 #include "newfolder.h"
+#include "copyingstatuswindow.h"
 #include <QDebug>
 
 class ModelViewController : public QObject
@@ -86,6 +88,7 @@ public:
 private:
 
     void openFile(const QString &path);
+    void pasteToRoot(const QString &root);
 
     QFileSystemModel *FsModel;
     QDirModel *DriveModel;
@@ -127,13 +130,13 @@ private:
     void initContextMenus();
     void initBackForwardNavigation();
 
-    //Stores paths to copy
-    QStringList copyPaths;
-
     //Context menu
     ContextMenu *conMenu;
     SmallContextMenu *smallConMenu;
-
+    static bool contextCutFlag;
+    static QStringList copyPaths;
+    copy_options askForCopyOptions();
+    //static QStringList infoPath;
 
 private slots:
     void on_rootIndexChanged(const QModelIndex &index);
