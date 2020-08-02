@@ -421,6 +421,7 @@ void ModelViewController::initFsModel()
     DisplayedPathLineEdit->setText(DefaultPath);
     connect(FsViewModel->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModelViewController::on_currentChanged);
     connect(this, &ModelViewController::rootIndexChanged, this, &ModelViewController::on_rootIndexChanged);
+    connect(FsViewModel, &FSView::selectionClearedSignal, this, &ModelViewController::deselect);
     FsViewModel->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(FsViewModel, &FSView::customContextMenuRequested, this, &ModelViewController::on_customMenuRequested);
     FsViewModel->setDragEnabled(true);
@@ -595,6 +596,12 @@ void ModelViewController::on_customMenuRequested(const QPoint &pos)
 void ModelViewController::updateDiskList()
 {
     DriveModel->refresh();
+}
+
+void ModelViewController::deselect()
+{
+    DisplayedPathLineEdit->setText(currentPath);
+    displayedPathCurrent = DisplayedPathLineEdit->text();
 }
 
 void ModelViewController::contextOpen()

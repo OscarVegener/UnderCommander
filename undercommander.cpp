@@ -26,7 +26,7 @@ UnderCommander::UnderCommander(QWidget *parent)
                                              ui->pushButtonLeft,
                                              ui->leftView,
                                              this,
-                                             "C:\\",
+                                             "C:/",
                                              this);
     rightController = new ModelViewController(rightModel,
                                               drivesModelRight,
@@ -37,7 +37,7 @@ UnderCommander::UnderCommander(QWidget *parent)
                                               ui->pushButtonRight,
                                               ui->rightView,
                                               this,
-                                              "C:\\",
+                                              "C:/",
                                               this);
     ui->rightWidget->hide();
     //ui->rightView->setModel(rightModel);

@@ -15,6 +15,18 @@ void FSView::init()
     this->setAutoScroll(true);
 }
 
+void FSView::mousePressEvent(QMouseEvent *event)
+{
+    QModelIndex index = indexAt(event->pos());
+    QTreeView::mousePressEvent(event);
+    if(index.row() == -1 && index.column() == -1){
+        clearSelection();
+        QModelIndex newIndex;
+        selectionModel()->setCurrentIndex(newIndex, QItemSelectionModel::Select);
+        emit selectionClearedSignal();
+    }
+}
+
 void FSView::dragEnterEvent(QDragEnterEvent *event){
     //FSView::setDragDropOverwriteMode(true);
     event->acceptProposedAction();

@@ -6,16 +6,19 @@
 #include <QAbstractItemView>
 #include <QHeaderView>
 
-//#include "undercommander.h"
-
 class FSView : public QTreeView
 {
+    Q_OBJECT
 public:
     FSView(QWidget *parent = nullptr) : QTreeView(parent) {}
     void init();
+private:
+    virtual void mousePressEvent(QMouseEvent *event) override;
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     virtual void dropEvent(QDropEvent *e) override;
+signals:
+    void selectionClearedSignal();
 };
 
 #endif // FSVIEW_H

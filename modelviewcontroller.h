@@ -143,6 +143,7 @@ private slots:
     void on_currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void on_customMenuRequested(const QPoint &pos);
     void updateDiskList();
+    void deselect();
 
     //Context menu slots
     void contextOpen();
