@@ -170,6 +170,7 @@ signals:
     void WarningSignal(const QString &message);
     void creatingFileErrorSignal(const QString &message);
     void creatingFolderErrorSignal(const QString &message);
+    void removingFilesErrorSignal(const QString &message);
 };
 
 #endif // MODELVIEWCONTROLLER_H

@@ -12,6 +12,7 @@ void FSView::init()
     this->hideColumn(3);
     this->setUniformRowHeights(true);
     this->setExpandsOnDoubleClick(false);
+    this->setAutoScroll(true);
 }
 
 void FSView::dragEnterEvent(QDragEnterEvent *event){

@@ -758,7 +758,75 @@ void ModelViewController::contextPasteToRoot()
 
 void ModelViewController::contextDelete()
 {
-
+    QModelIndexList itemsToDelete = FsViewModel->selectionModel()->selectedRows();
+    error_code removingError;
+    bool skipFlag = false;
+    QFileInfo fileInfo;
+    foreach(QModelIndex index, itemsToDelete){
+        fileInfo = FsModel->fileInfo(index);
+        if(fileInfo.isFile()){
+            if(!skipFlag){
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(Window, "Delete file", "Are you sure you want to delete this"
+                                                                       " \nfile: " + fileInfo.absoluteFilePath() +"?",
+                                              QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
+                switch(reply){
+                    case QMessageBox::YesToAll:
+                        skipFlag = true;
+                        remove_all(fileInfo.absoluteFilePath().toStdString(), removingError);
+                        if (removingError.value() != 0){
+                            emit removingFilesErrorSignal(createIdMessage(QString::fromStdString(removingError.message())));
+                        }
+                        break;
+                    case QMessageBox::No: break;
+                    case QMessageBox::Yes:
+                        remove_all(fileInfo.absoluteFilePath().toStdString(), removingError);
+                        if (removingError.value() != 0){
+                            emit removingFilesErrorSignal(createIdMessage(QString::fromStdString(removingError.message())));
+                        }
+                        break;
+                    default: emit removingFilesErrorSignal(createIdMessage("Error receiving answer from user."));
+                }
+            }
+            else{
+                remove_all(fileInfo.absoluteFilePath().toStdString(), removingError);
+                if (removingError.value() != 0){
+                    emit removingFilesErrorSignal(createIdMessage(QString::fromStdString(removingError.message())));
+                }
+            }
+        }
+        else if(fileInfo.isDir()){
+            if(!skipFlag){
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(Window, "Delete folder", "Are you sure you want to delete this"
+                                                                       " \nfolder: " + fileInfo.absoluteFilePath() +"?",
+                                              QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
+                switch(reply){
+                    case QMessageBox::YesToAll:
+                        skipFlag = true;
+                        remove_all(fileInfo.absoluteFilePath().toStdString(), removingError);
+                        if (removingError.value() != 0){
+                            emit removingFilesErrorSignal(createIdMessage(QString::fromStdString(removingError.message())));
+                        }
+                        break;
+                    case QMessageBox::No: break;
+                    case QMessageBox::Yes:
+                        remove_all(fileInfo.absoluteFilePath().toStdString(), removingError);
+                        if (removingError.value() != 0){
+                            emit removingFilesErrorSignal(createIdMessage(QString::fromStdString(removingError.message())));
+                        }
+                        break;
+                    default: emit removingFilesErrorSignal(createIdMessage("Error receiving answer from user."));
+                }
+            }
+            else{
+                remove_all(fileInfo.absoluteFilePath().toStdString(), removingError);
+                if (removingError.value() != 0){
+                    emit removingFilesErrorSignal(createIdMessage(QString::fromStdString(removingError.message())));
+                }
+            }
+        }
+    }
 }
 
 void ModelViewController::contextRename()

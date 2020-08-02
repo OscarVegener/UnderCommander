@@ -28,17 +28,18 @@ UnderCommander::UnderCommander(QWidget *parent)
                                              this,
                                              "C:\\",
                                              this);
-//    rightController = new ModelViewController(rightModel,
-//                                              drivesModelRight,
-//                                              ui->textEditRight,
-//                                              ui->comboBoxRight,
-//                                              ui->forwardRight,
-//                                              ui->backRight,
-//                                              ui->pushButtonRight,
-//                                              ui->rightView,
-//                                              this,
-//                                              "C:\\",
-//                                              this);
+    rightController = new ModelViewController(rightModel,
+                                              drivesModelRight,
+                                              ui->textEditRight,
+                                              ui->comboBoxRight,
+                                              ui->forwardRight,
+                                              ui->backRight,
+                                              ui->pushButtonRight,
+                                              ui->rightView,
+                                              this,
+                                              "C:\\",
+                                              this);
+    ui->rightWidget->hide();
     //ui->rightView->setModel(rightModel);
     //rightModel->setRootPath(rightModel->myComputer().toString());
     initPalettes();
@@ -182,14 +183,9 @@ void UnderCommander::on_leftView_clicked(const QModelIndex &index)
 
 void UnderCommander::on_rightView_clicked(const QModelIndex &index)
 {
-    //rightController->select(index);
+    rightController->select(index);
 }
 
-void UnderCommander::on_rightView_doubleClicked(const QModelIndex &index)
-{
-    //rightController->open(index);
-    //ui->rightView->setRootIndex(index);
-}
 
 void UnderCommander::on_pushButtonLeft_clicked()
 {
@@ -198,7 +194,7 @@ void UnderCommander::on_pushButtonLeft_clicked()
 
 void UnderCommander::on_pushButtonRight_clicked()
 {
-    //rightController->go(ui->textEditRight->text());
+    rightController->go(ui->textEditRight->text());
 }
 
 void UnderCommander::on_backLeft_clicked()
@@ -208,7 +204,7 @@ void UnderCommander::on_backLeft_clicked()
 
 void UnderCommander::on_backRight_clicked()
 {
-    //rightController->back();
+    rightController->back();
 }
 
 
@@ -219,7 +215,7 @@ void UnderCommander::on_forwardLeft_clicked()
 
 void UnderCommander::on_forwardRight_clicked()
 {
-    //rightController->forward();
+    rightController->forward();
 }
 
 void UnderCommander::leftContextNewFile()
@@ -232,13 +228,7 @@ void UnderCommander::leftContextNewFolder()
 
 void UnderCommander::leftContextCut()
 {
-//    contextCutFlag = true;
-//    copyPaths.clear();
-//    QModelIndexList list = ui->leftView->selectionModel()->selectedRows();
-//    foreach (QModelIndex idx, list){
-//        copyPaths.push_back(leftModel->fileInfo(idx).absoluteFilePath());
-//    }
-//    qDebug() << copyPaths;
+
 }
 
 void UnderCommander::leftContextCopy()
@@ -264,178 +254,12 @@ void UnderCommander::leftContextPaste()
 
 void UnderCommander::leftContextPasteRoot()
 {
-//    QModelIndex index = ui->leftView->rootIndex();
-//    QString dest = leftModel->fileInfo(index).absoluteFilePath();
-//    copy_options options = askForCopyOptions();
-//    foreach (QString item, copyPaths){
-//        if (exists(item.toStdString())){
-//            CopyingStatusWindow *window = new CopyingStatusWindow(item, dest, contextCutFlag);
-//            window->setOptions(options);
-//            window->setSkip(true);
-//            window->setModal(true);
-//            window->setAttribute(Qt::WA_DeleteOnClose);
-//            window->exec();
-//        }
-//    }
+
 }
 
 void UnderCommander::leftContextDelete() //to do
 {
-//    //QModelIndexList list = ui->leftView->selectionModel()->selectedIndexes();
-//    QModelIndexList list = ui->leftView->selectionModel()->selectedRows();
-//    if (list.count() > 1){
-//        QFileInfo fileInfo;
-//        foreach (const QModelIndex &index, list){
-//            fileInfo = leftModel->fileInfo(index);
-//            if (fileInfo.isDir()){
-//                QMessageBox::StandardButton reply;
-//                QString questionString = "Are you sure you want to delete this folder(" + fileInfo.fileName() +")?";
-//                reply = QMessageBox::question(this, "Delete folder", questionString, QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
-//                if (reply == QMessageBox::YesToAll){
-//                    //ui->textEdit->setText("All items has been deleted");
-//                    list = ui->leftView->selectionModel()->selectedIndexes();
-//                    foreach (const QModelIndex &deleteIndex2, list){
-//                        fileInfo = leftModel->fileInfo(deleteIndex2);
-//                        //ui->textEdit->setText(ui->textEdit->toPlainText() + " " +QString::number(deleteIndex.row()));
-//                        if (fileInfo.isDir()){
-//                            QDir dir(fileInfo.absoluteFilePath());
-//                            if(dir.exists()){
-//                                if (dir.removeRecursively()){
-//                                    //ui->textEdit->setText("folder deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                        else if(fileInfo.isFile()){
-//                            if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                                if (QFile::remove(fileInfo.absoluteFilePath())){
-//                                    //ui->textEdit->setText("file deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                    }
-//                    ui->textEditLeft->setText(leftModel->rootPath());
-//                    break;
-//                }
-//                if (reply == QMessageBox::Yes){
-//                    QDir dir(fileInfo.absoluteFilePath());
-//                    if (dir.exists()){
-//                        if (dir.removeRecursively()){
-//                            //ui->textEdit->setText("folder deleted");
-//                            ui->textEditLeft->setText(leftModel->rootPath());
-//                        }
-//                        else{
-//                            QApplication::beep();
-//                            QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                            QMessageBox::warning(this, "UnderCommander", messageString);
-//                        }
-//                    }
-//                }
-//            }
-//            else if (fileInfo.isFile()){
-//                QMessageBox::StandardButton reply;
-//                QString questionString = "Are you sure you want to delete this file(" + fileInfo.fileName() +")?";
-//                reply = QMessageBox::question(this, "Delete file", questionString, QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
-//                if (reply == QMessageBox::YesToAll){
-//                    list = ui->leftView->selectionModel()->selectedIndexes();
-//                    //ui->textEdit->setText("All items has been deleted");
-//                    foreach (const QModelIndex &deleteIndex1, list){
-//                        fileInfo = leftModel->fileInfo(deleteIndex1);
-//                        if(fileInfo.isDir()){
-//                            QDir dir(fileInfo.absoluteFilePath());
-//                            if (dir.exists()){
-//                                if (dir.removeRecursively()){
-//                                    //ui->textEdit->setText("folder deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                        else if (fileInfo.isFile()){
-//                            if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                                if (QFile::remove(fileInfo.absoluteFilePath())){
-//                                    //ui->textEdit->setText("file deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                    }
-//                    ui->textEditLeft->setText(leftModel->rootPath());
-//                    break;
-//                }
-//                if (reply == QMessageBox::Yes){
-//                    if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                        if (QFile::remove(fileInfo.absoluteFilePath())){
-//                            //ui->textEdit->setText("file deleted");
-//                            ui->textEditLeft->setText(leftModel->rootPath());
-//                        }
-//                        else{
-//                            QApplication::beep();
-//                            QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                            QMessageBox::warning(this, "UnderCommander", messageString);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    else if (list.count() == 1){
-//        QModelIndex index = ui->leftView->currentIndex();
-//        QFileInfo fileInfo = leftModel->fileInfo(index);
-//        if (fileInfo.isDir()){
-//            QMessageBox::StandardButton reply;
-//            QString questionString = "Are you sure you want to delete this folder(" + fileInfo.fileName() +")?";
-//            reply = QMessageBox::question(this, "Delete folder", questionString, QMessageBox::Yes | QMessageBox::No);
-//            if (reply == QMessageBox::Yes){
-//                QDir dir(fileInfo.absoluteFilePath());
-//                if (dir.exists()){
-//                    if (dir.removeRecursively()){
-//                        //ui->textEdit->setText("folder deleted");
-//                        ui->textEditLeft->setText(leftModel->rootPath());
-//                    }
-//                    else{
-//                        QApplication::beep();
-//                        QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                        QMessageBox::warning(this, "UnderCommander", messageString);
-//                    }
-//                }
-//            }
-//        }
-//        else if (fileInfo.isFile()){
-//            QMessageBox::StandardButton reply;
-//            QString questionString = "Are you sure you want to delete this file(" + fileInfo.fileName() +")?";
-//            reply = QMessageBox::question(this, "Delete file", questionString, QMessageBox::Yes | QMessageBox::No);
-//            if (reply == QMessageBox::Yes){
-//                if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                    if (QFile::remove(fileInfo.absoluteFilePath())){
-//                        //ui->textEdit->setText("file deleted");
-//                        ui->textEditLeft->setText(leftModel->rootPath());
-//                    }
-//                    else{
-//                        QApplication::beep();
-//                        QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                        QMessageBox::warning(this, "UnderCommander", messageString);
-//                    }
-//                }
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::leftContextInfo()
@@ -607,13 +431,7 @@ void UnderCommander::rightContextNewFolder()
 
 void UnderCommander::rightContextCut()
 {
-//    contextCutFlag = true;
-//    copyPaths.clear();
-//    QModelIndexList list = ui->rightView->selectionModel()->selectedRows();
-//    foreach (QModelIndex idx, list){
-//        copyPaths.push_back(rightModel->fileInfo(idx).absoluteFilePath());
-//    }
-//    qDebug() << copyPaths;
+
 }
 
 void UnderCommander::rightContextCopy()
@@ -634,36 +452,12 @@ void UnderCommander::rightContextCopyFolderFiles()
 
 void UnderCommander::rightContextPaste()
 {
-//    QModelIndex index = ui->rightView->currentIndex();
-//    QString dest = rightModel->fileInfo(index).absoluteFilePath();
-//    copy_options options = askForCopyOptions();
-//    foreach (QString item, copyPaths){
-//        if (exists(item.toStdString())){
-//            CopyingStatusWindow *window = new CopyingStatusWindow(item, dest, contextCutFlag);
-//            window->setOptions(options);
-//            window->setSkip(true);
-//            window->setModal(true);
-//            window->setAttribute(Qt::WA_DeleteOnClose);
-//            window->exec();
-//        }
-//    }
+
 }
 
 void UnderCommander::rightContextPasteRoot()
 {
-//    QModelIndex index = ui->rightView->rootIndex();
-//    QString dest = rightModel->fileInfo(index).absoluteFilePath();
-//    copy_options options = askForCopyOptions();
-//    foreach (QString item, copyPaths){
-//        if (exists(item.toStdString())){
-//            CopyingStatusWindow *window = new CopyingStatusWindow(item, dest, contextCutFlag);
-//            window->setOptions(options);
-//            window->setSkip(true);
-//            window->setModal(true);
-//            window->setAttribute(Qt::WA_DeleteOnClose);
-//            window->exec();
-//        }
-//    }
+
 }
 
 void UnderCommander::rightContextDelete()
@@ -1239,7 +1033,7 @@ void UnderCommander::on_comboBoxLeft_activated(const QString &arg1)
 
 void UnderCommander::on_comboBoxRight_activated(const QString &arg1)
 {
-    //rightController->changeDrive(arg1);
+    rightController->changeDrive(arg1);
 }
 
 void UnderCommander::on_leftView_activated(const QModelIndex &index)
@@ -1247,3 +1041,8 @@ void UnderCommander::on_leftView_activated(const QModelIndex &index)
     leftController->open(index);
 }
 
+
+void UnderCommander::on_rightView_activated(const QModelIndex &index)
+{
+    rightController->open(index);
+}

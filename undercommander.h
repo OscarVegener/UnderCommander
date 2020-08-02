@@ -43,8 +43,6 @@ public:
 private slots:
     void on_rightView_clicked(const QModelIndex &index);
 
-    void on_rightView_doubleClicked(const QModelIndex &index);
-
     void on_pushButtonLeft_clicked();
 
     void on_pushButtonRight_clicked();
@@ -181,6 +179,8 @@ private slots:
     void on_leftView_activated(const QModelIndex &index);
 
     void on_leftView_clicked(const QModelIndex &index);
+
+    void on_rightView_activated(const QModelIndex &index);
 
 private:
     Ui::UnderCommander *ui;
