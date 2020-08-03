@@ -12,8 +12,6 @@ class calcSize : public QObject
     Q_PROPERTY(bool Stop READ Stop WRITE setStop NOTIFY StopChanged)
 
 public:
-    //calcSize(QObject *parent = nullptr) : QObject(parent) {}
-
     bool Finished() const;
 
     bool Stop() const;

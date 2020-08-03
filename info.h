@@ -9,6 +9,7 @@
 #include <QCloseEvent>
 #include <QProgressBar>
 #include "calcsize.h"
+//#include "windowsexplorerproperties.h"
 #include <QDebug>
 
 namespace Ui {
@@ -34,7 +35,9 @@ private:
     QProgressBar *progressBar;
 signals:
     void startCalcSizeUC(const QFileInfo fileInfo);
-    void removePathFromList(const QString path);
+    void removePathFromList(const QString &path);
+private slots:
+    void on_propertiesButton_clicked();
 };
 
 #endif // INFO_H

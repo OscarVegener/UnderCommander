@@ -2,7 +2,7 @@
 #define MODELVIEWCONTROLLER_H
 
 #define defaultPathValue "C:\\"
-#define StackLimit 100
+#define NavigationStackLimit 100
 #include <QObject>
 #include <QFileSystemModel>
 #include <QDirModel>
@@ -21,6 +21,7 @@
 #include "newfile.h"
 #include "newfolder.h"
 #include "copyingstatuswindow.h"
+#include "info.h"
 #include <QDebug>
 
 class ModelViewController : public QObject
@@ -89,6 +90,8 @@ private:
 
     void openFile(const QString &path);
     void pasteToRoot(const QString &root);
+    void deleteInfoPath(const QString &path);
+    void clearCurrentIndexSelection();
 
     QFileSystemModel *FsModel;
     QDirModel *DriveModel;
@@ -111,8 +114,8 @@ private:
     QTimer *timer;
     QStack<QString> backStack;
     QStack<QString> forwardStack;
-    int backStackLimit = StackLimit;
-    int forwardStackLimit = StackLimit;
+    int backStackLimit = NavigationStackLimit;
+    int forwardStackLimit = NavigationStackLimit;
 
     bool restoredPathFlag = false;
 
@@ -136,7 +139,7 @@ private:
     static bool contextCutFlag;
     static QStringList copyPaths;
     copy_options askForCopyOptions();
-    //static QStringList infoPath;
+    static QStringList infoPaths;
 
 private slots:
     void on_rootIndexChanged(const QModelIndex &index);
@@ -172,6 +175,7 @@ signals:
     void creatingFileErrorSignal(const QString &message);
     void creatingFolderErrorSignal(const QString &message);
     void removingFilesErrorSignal(const QString &message);
+    void propertiesWarningSignal(const QString &message);
 };
 
 #endif // MODELVIEWCONTROLLER_H

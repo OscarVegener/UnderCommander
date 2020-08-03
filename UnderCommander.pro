@@ -34,7 +34,8 @@ SOURCES += \
     newfolder.cpp \
     smallcontextmenu.cpp \
     tabs.cpp \
-    undercommander.cpp
+    undercommander.cpp \
+    windowsexplorerproperties.cpp
 
 HEADERS += \
     calcsize.h \
@@ -49,7 +50,8 @@ HEADERS += \
     newfolder.h \
     smallcontextmenu.h \
     tabs.h \
-    undercommander.h
+    undercommander.h \
+    windowsexplorerproperties.h
 
 FORMS += \
     copyfolder.ui \

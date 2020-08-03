@@ -81,10 +81,12 @@ void CopyingStatusWindow::closeEvent(QCloseEvent *e)
 {
     if(thread->isRunning()){
         if(CutFlag){
+            QApplication::beep();
             QMessageBox::warning(this, windowTitle, "UnderCommander is moving files at the moment. \n"
                                                     "Stoping it can lead to errors and file corrupting.");
         }
         else{
+            QApplication::beep();
             QMessageBox::warning(this, windowTitle, "UnderCommander is copying files at the moment. \n"
                                                     "Stoping it can lead to errors and file corrupting.");
         }

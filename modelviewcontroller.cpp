@@ -54,6 +54,8 @@ bool ModelViewController::contextCutFlag = 0;
 
 QStringList ModelViewController::copyPaths;
 
+QStringList ModelViewController::infoPaths;
+
 QFileSystemModel *ModelViewController::getFsModel() const
 {
     return FsModel;
@@ -370,6 +372,20 @@ void ModelViewController::pasteToRoot(const QString &root)
     }
 }
 
+void ModelViewController::deleteInfoPath(const QString &path)
+{
+    infoPaths.removeAt(infoPaths.indexOf(path));
+}
+
+void ModelViewController::clearCurrentIndexSelection()
+{
+    DisplayedPathLineEdit->setText(currentPath);
+    displayedPathCurrent = DisplayedPathLineEdit->text();
+    QModelIndex newIndex;
+    FsViewModel->selectionModel()->clearSelection();
+    FsViewModel->selectionModel()->setCurrentIndex(newIndex, QItemSelectionModel::Select);
+}
+
 QString ModelViewController::createIdMessage(QString m)
 {
     return "{Id: " + QString::number(Id) + "} " + m;
@@ -452,7 +468,6 @@ void ModelViewController::initContextMenus()
     connect(smallConMenu->getNewFolderAction(), &QAction::triggered, this, &ModelViewController::contextNewFolder);
     connect(smallConMenu->getPasteToRootAction(), &QAction::triggered, this, &ModelViewController::contextPasteToRoot);
     connect(smallConMenu->getInfoAction(), &QAction::triggered, this, &ModelViewController::contextInfo);
-
 }
 
 void ModelViewController::initBackForwardNavigation()
@@ -471,7 +486,8 @@ copy_options ModelViewController::askForCopyOptions()
     }
     else{
         reply = QMessageBox::question(Window, "Copying files...", "Update existing files"
-                                                                "(replace the existing file only if it is older than the file being copied)?",
+                                                                "(replace the existing file only"
+                                                                  " if it is older than the file being copied)?",
                                       QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes){
             options = options | copy_options::update_existing;
@@ -485,7 +501,8 @@ copy_options ModelViewController::askForCopyOptions()
         options = options | copy_options::copy_symlinks;
     }
     else{
-        reply = QMessageBox::question(Window, "Copying files...", "Create simlinks instead of copying?", QMessageBox::Yes | QMessageBox::No);
+        reply = QMessageBox::question(Window, "Copying files...", "Create simlinks instead of copying?",
+                                      QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes){
             options = options | copy_options::create_symlinks;
         }
@@ -846,5 +863,37 @@ void ModelViewController::contextRename()
 
 void ModelViewController::contextInfo()
 {
-
+    QModelIndex curIndex = FsViewModel->selectionModel()->currentIndex();
+    if (FsViewModel->selectionModel()->selectedRows().contains(curIndex)){
+        QString infoPath = FsModel->fileInfo(curIndex).absoluteFilePath();
+        if (!infoPaths.contains(infoPath)){
+            infoPaths.push_back(infoPath);
+            info *window = new info(Window, infoPath);
+            connect(window, &info::removePathFromList, this, &ModelViewController::deleteInfoPath);
+            window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+            window->setModal(false);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->show();
+        }
+        else {
+            emit propertiesWarningSignal(createIdMessage("Properties window is already opened for this entry."));
+        }
+    }
+    else{
+        clearCurrentIndexSelection();
+        QModelIndex index = FsViewModel->rootIndex();
+        QString infoPath = FsModel->fileInfo(index).absoluteFilePath();
+        if (!infoPaths.contains(infoPath)){
+            infoPaths.push_back(infoPath);
+            info *window = new info(Window, infoPath);
+            connect(window, &info::removePathFromList, this, &ModelViewController::deleteInfoPath);
+            window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+            window->setModal(false);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->show();
+        }
+        else {
+            emit propertiesWarningSignal(createIdMessage("Properties window is already opened for this entry."));
+        }
+    }
 }

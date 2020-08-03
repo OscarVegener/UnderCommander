@@ -1,5 +1,6 @@
 #include "info.h"
 #include "ui_info.h"
+#include "windowsexplorerproperties.h"
 
 info::info(QWidget *parent, QString path) :
     QDialog(parent),
@@ -82,4 +83,11 @@ void info::on_calculatingFinishedUC(const QString size)
     progressBar->hide();
     ui->lineSize->show();
     ui->lineSize->setText(size);
+}
+
+void info::on_propertiesButton_clicked()
+{
+    WindowsExplorerProperties window(infoPath);
+    window.exec();
+    //Sleep(10000);
 }

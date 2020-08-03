@@ -1,6 +1,5 @@
 #include "undercommander.h"
 #include "ui_undercommander.h"
-//#include "modelviewcontroller.h"
 #include "newfile.cpp"
 #include "newfolder.h"
 #include "info.h"
@@ -15,8 +14,6 @@ UnderCommander::UnderCommander(QWidget *parent)
     rightModel = new QFileSystemModel(this);
     drivesModelLeft = new QDirModel(parent = this);
     drivesModelRight = new QDirModel(parent = this);
-
-
     leftController = new ModelViewController(leftModel,
                                              drivesModelLeft,
                                              ui->textEditLeft,
@@ -40,8 +37,6 @@ UnderCommander::UnderCommander(QWidget *parent)
                                               "C:/",
                                               this);
     ui->rightWidget->hide();
-    //ui->rightView->setModel(rightModel);
-    //rightModel->setRootPath(rightModel->myComputer().toString());
     initPalettes();
     //createTabs();
 }
@@ -186,7 +181,6 @@ void UnderCommander::on_rightView_clicked(const QModelIndex &index)
     rightController->select(index);
 }
 
-
 void UnderCommander::on_pushButtonLeft_clicked()
 {
     leftController->go(ui->textEditLeft->text());
@@ -269,58 +263,12 @@ void UnderCommander::leftContextInfo()
 
 void UnderCommander::smallLeftContextNewFile()
 {
-//    QModelIndex index = ui->leftView->rootIndex();
-//    newfile window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        newFileName = leftModel->filePath(index) + "/" + window.getFileName();
-//        if (QFile::exists(newFileName)){
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "File already exists!");
-//        }
-//        else {
-//            QFile file(newFileName);
-//            if (file.open(QIODevice::WriteOnly)){
-//                //ui->textEdit->setText("Succesfully: " + file.fileName());
-//                file.close();
-//            }
-//            else{
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "File was not created. Probably you don't have permission?");
-//                //ui->textEdit->setText("File was not created");
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::smallLeftContextNewFolder()
 {
-//    //QModelIndex index = ui->leftView->rootIndex();
-//    newfolder window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        newFolderName = window.getPathName();
-//        if (QDir(leftModel->rootPath() + "/" + newFolderName).exists()){
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Folder already exists!");
-//        }
-//        else{
-//            QDir currentDir(leftModel->rootPath());
-//            //ui->textEdit->setText(currentDir.absolutePath());
-//            if (currentDir.mkdir(newFolderName)){
-//                //ui->textEdit->setText(currentDir.absolutePath() +"/" + newFolderName);
-//            }
-//            else{
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "Folder was not created. Probably you don't have permission?");
-//                //ui->textEdit->setText("Folder was not created");
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::smallLeftContextInfo()
@@ -330,103 +278,12 @@ void UnderCommander::smallLeftContextInfo()
 
 void UnderCommander::rightContextNewFile()
 {
-//    QModelIndex index = ui->rightView->currentIndex();
-//    QFileInfo fileInfo = rightModel->fileInfo(index);
-//    newfile window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        if (fileInfo.isFile()){
-//            newFileName = rightModel->rootPath() + "/" + window.getFileName();
-//            if (QFile::exists(newFileName)){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "File already exists!");
-//            }
-//            else {
-//                QFile file(newFileName);
-//                if (file.open(QIODevice::WriteOnly)){
-//                    //ui->textEdit->setText("Succesfully: " + file.fileName());
-//                    file.close();
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "File was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("File was not created");
-//                }
-//            }
-//        }
-//        else if(fileInfo.isDir()){
-//            newFileName = rightModel->filePath(index) + "/" + window.getFileName();
-//            if (QFile::exists(newFileName)){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "File already exists!");
-//            }
-//            else {
-//                QFile file(newFileName);
-//                if (file.open(QIODevice::WriteOnly)){
-//                    //ui->textEdit->setText("Succesfully: " + file.fileName());
-//                    file.close();
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "File was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("File was not created");
-//                }
-//            }
-//        }
-//    }
-//    //else ui->textEdit->setText("Not accepted");
+
 }
 
 void UnderCommander::rightContextNewFolder()
 {
-//    QModelIndex index = ui->rightView->currentIndex();
-//    QFileInfo fileInfo = rightModel->fileInfo(index);
-//    newfolder window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        if (fileInfo.isFile()){
-//            newFolderName = window.getPathName();
-//            if (QDir(rightModel->rootPath() + "/" + newFolderName).exists()){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "Folder already exists!");
-//            }
-//            else{
-//                QDir currentDir(rightModel->rootPath());
-//                //ui->textEdit->setText(currentDir.absolutePath());
-//                if (currentDir.mkdir(newFolderName)){
-//                    //ui->textEdit->setText(currentDir.absolutePath() +"/" + newFolderName);
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "Folder was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("Folder was not created");
-//                }
-//            }
-//        }
-//        else if(fileInfo.isDir()){
-//            newFolderName = window.getPathName();
-//            if (QDir(rightModel->filePath(index) + "/" + newFolderName).exists()){
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "Folder already exists!");
-//            }
-//            else{
-//                QDir currentDir(rightModel->filePath(index));
-//                //ui->textEdit->setText(currentDir.absolutePath());
-//                if (currentDir.mkdir(newFolderName)){
-//                    //ui->textEdit->setText(currentDir.absolutePath() +"/" + newFolderName);
-//                }
-//                else{
-//                    QApplication::beep();
-//                    QMessageBox::warning(this, "UnderCommander", "Folder was not created. Probably you don't have permission?");
-//                    //ui->textEdit->setText("Folder was not created");
-//                }
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::rightContextCut()
@@ -462,160 +319,7 @@ void UnderCommander::rightContextPasteRoot()
 
 void UnderCommander::rightContextDelete()
 {
-//    QModelIndexList list = ui->rightView->selectionModel()->selectedIndexes();
-//    if (list.count() > 1){
-//        QFileInfo fileInfo;
-//        foreach (const QModelIndex &index, list){
-//            fileInfo = rightModel->fileInfo(index);
-//            if (fileInfo.isDir()){
-//                QMessageBox::StandardButton reply;
-//                QString questionString = "Are you sure you want to delete this folder(" + fileInfo.fileName() +")?";
-//                reply = QMessageBox::question(this, "Delete folder", questionString, QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
-//                if (reply == QMessageBox::YesToAll){
-//                    //ui->textEdit->setText("All items has been deleted");
-//                    list = ui->rightView->selectionModel()->selectedIndexes();
-//                    foreach (const QModelIndex &deleteIndex2, list){
-//                        fileInfo = rightModel->fileInfo(deleteIndex2);
-//                        //ui->textEdit->setText(ui->textEdit->toPlainText() + " " +QString::number(deleteIndex.row()));
-//                        if (fileInfo.isDir()){
-//                            QDir dir(fileInfo.absoluteFilePath());
-//                            if(dir.exists()){
-//                                if (dir.removeRecursively()){
-//                                    //ui->textEdit->setText("folder deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                        else if(fileInfo.isFile()){
-//                            if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                                if (QFile::remove(fileInfo.absoluteFilePath())){
-//                                    //ui->textEdit->setText("file deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                    }
-//                    ui->textEditRight->setText(rightModel->rootPath());
-//                    break;
-//                }
-//                if (reply == QMessageBox::Yes){
-//                    QDir dir(fileInfo.absoluteFilePath());
-//                    if (dir.exists()){
-//                        if (dir.removeRecursively()){
-//                            //ui->textEdit->setText("folder deleted");
-//                            ui->textEditRight->setText(rightModel->rootPath());
-//                        }
-//                        else{
-//                            QApplication::beep();
-//                            QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                            QMessageBox::warning(this, "UnderCommander", messageString);
-//                        }
-//                    }
-//                }
-//            }
-//            else if (fileInfo.isFile()){
-//                QMessageBox::StandardButton reply;
-//                QString questionString = "Are you sure you want to delete this file(" + fileInfo.fileName() +")?";
-//                reply = QMessageBox::question(this, "Delete file", questionString, QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No);
-//                if (reply == QMessageBox::YesToAll){
-//                    list = ui->rightView->selectionModel()->selectedIndexes();
-//                    //ui->textEdit->setText("All items has been deleted");
-//                    foreach (const QModelIndex &deleteIndex1, list){
-//                        fileInfo = rightModel->fileInfo(deleteIndex1);
-//                        if(fileInfo.isDir()){
-//                            QDir dir(fileInfo.absoluteFilePath());
-//                            if (dir.exists()){
-//                                if (dir.removeRecursively()){
-//                                    //ui->textEdit->setText("folder deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                        else if (fileInfo.isFile()){
-//                            if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                                if (QFile::remove(fileInfo.absoluteFilePath())){
-//                                    //ui->textEdit->setText("file deleted");
-//                                }
-//                                else{
-//                                    QApplication::beep();
-//                                    QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                                    QMessageBox::warning(this, "UnderCommander", messageString);
-//                                }
-//                            }
-//                        }
-//                    }
-//                    ui->textEditRight->setText(rightModel->rootPath());
-//                    break;
-//                }
-//                if (reply == QMessageBox::Yes){
-//                    if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                        if (QFile::remove(fileInfo.absoluteFilePath())){
-//                            //ui->textEdit->setText("file deleted");
-//                            ui->textEditRight->setText(rightModel->rootPath());
-//                        }
-//                        else{
-//                            QApplication::beep();
-//                            QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                            QMessageBox::warning(this, "UnderCommander", messageString);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    else if (list.count() == 1){
-//        QModelIndex index = ui->rightView->currentIndex();
-//        QFileInfo fileInfo = rightModel->fileInfo(index);
-//        if (fileInfo.isDir()){
-//            QMessageBox::StandardButton reply;
-//            QString questionString = "Are you sure you want to delete this folder(" + fileInfo.fileName() +")?";
-//            reply = QMessageBox::question(this, "Delete folder", questionString, QMessageBox::Yes | QMessageBox::No);
-//            if (reply == QMessageBox::Yes){
-//                QDir dir(fileInfo.absoluteFilePath());
-//                if (dir.exists()){
-//                    if (dir.removeRecursively()){
-//                        //ui->textEdit->setText("folder deleted");
-//                        ui->textEditRight->setText(rightModel->rootPath());
-//                    }
-//                    else{
-//                        QApplication::beep();
-//                        QString messageString = "Folder(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or folder is open in another program.";
-//                        QMessageBox::warning(this, "UnderCommander", messageString);
-//                    }
-//                }
-//            }
-//        }
-//        else if (fileInfo.isFile()){
-//            QMessageBox::StandardButton reply;
-//            QString questionString = "Are you sure you want to delete this file(" + fileInfo.fileName() +")?";
-//            reply = QMessageBox::question(this, "Delete file", questionString, QMessageBox::Yes | QMessageBox::No);
-//            if (reply == QMessageBox::Yes){
-//                if (exists(fileInfo.absoluteFilePath().toStdString())){
-//                    if (QFile::remove(fileInfo.absoluteFilePath())){
-//                        //ui->textEdit->setText("file deleted");
-//                        ui->textEditRight->setText(rightModel->rootPath());
-//                    }
-//                    else{
-//                        QApplication::beep();
-//                        QString messageString = "File(" + fileInfo.fileName() + ") was not deleted. Probably you don't have permission or file is open in another program.";
-//                        QMessageBox::warning(this, "UnderCommander", messageString);
-//                    }
-//                }
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::rightContextInfo()
@@ -625,58 +329,12 @@ void UnderCommander::rightContextInfo()
 
 void UnderCommander::smallRightContextNewFile()
 {
-//    QModelIndex index = ui->rightView->rootIndex();
-//    newfile window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        newFileName = rightModel->filePath(index) + "/" + window.getFileName();
-//        if (QFile::exists(newFileName)){
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "File already exists!");
-//        }
-//        else {
-//            QFile file(newFileName);
-//            if (file.open(QIODevice::WriteOnly)){
-//                //ui->textEdit->setText("Succesfully: " + file.fileName());
-//                file.close();
-//            }
-//            else{
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "File was not created. Probably you don't have permission?");
-//                //ui->textEdit->setText("File was not created");
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::smallRightContextNewFolder()
 {
-//    //QModelIndex index = ui->rightView->rootIndex();
-//    newfolder window;
-//    window.setModal(true);
-//    window.setWindowFlags(window.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//    window.exec();
-//    if (window.isAccepted()){
-//        newFolderName = window.getPathName();
-//        if (QDir(rightModel->rootPath() + "/" + newFolderName).exists()){
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Folder already exists!");
-//        }
-//        else{
-//            QDir currentDir(rightModel->rootPath());
-//            //ui->textEdit->setText(currentDir.absolutePath());
-//            if (currentDir.mkdir(newFolderName)){
-//                //ui->textEdit->setText(currentDir.absolutePath() +"/" + newFolderName);
-//            }
-//            else{
-//                QApplication::beep();
-//                QMessageBox::warning(this, "UnderCommander", "Folder was not created. Probably you don't have permission?");
-//                //ui->textEdit->setText("Folder was not created");
-//            }
-//        }
-//    }
+
 }
 
 void UnderCommander::smallRightContextInfo()
