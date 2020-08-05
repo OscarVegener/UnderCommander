@@ -291,11 +291,13 @@ void ModelViewController::forward()
 
 void ModelViewController::go(const QString path)
 {
-    if(!path.isNull() || !path.isEmpty()){
+    if(!path.isEmpty()){
         QDir dir(path);
-        QFileInfo fileInfo = FsModel->fileInfo(FsModel->index(path));
+        QFileInfo fileInfo;
+        fileInfo.setFile(path);
         if (dir.exists() &&
             dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex()) &&
+            (dir.absolutePath() + "/") != FsModel->filePath(FsViewModel->rootIndex()) &&
             fileInfo.fileName() != "." &&
             fileInfo.fileName() != "..")
         {
@@ -517,6 +519,7 @@ void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
 {
     if (index.isValid()){
         QString newPath = FsModel->filePath(index);
+        qDebug() << "newPath(rootIndex changed): " << newPath;
         DisplayedPathLineEdit->setText(newPath);
         QString comboPath;
         comboPath.push_back(newPath.at(0));
@@ -749,7 +752,16 @@ void ModelViewController::contextCopy()
 
 void ModelViewController::contextCopyToClipboard()
 {
-
+    QModelIndexList indexList = FsViewModel->selectionModel()->selectedIndexes();
+    QModelIndexList mimeList;
+    foreach (QModelIndex idx, indexList){
+        if(FsModel->fileInfo(idx).isFile()){
+            mimeList.push_back(idx);
+        }
+    }
+    QMimeData *data = FsModel->mimeData(mimeList);
+    emit setClipboardDataSignal(data);
+    //QApplication::clipboard()->setMimeData(data);
 }
 
 void ModelViewController::contextPaste()

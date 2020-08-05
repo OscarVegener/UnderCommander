@@ -1,8 +1,6 @@
 #ifndef UNDERCOMMANDER_H
 #define UNDERCOMMANDER_H
 
-#define stackLimit 5
-
 #include <QMainWindow>
 #include <QDir>
 #include <QFileSystemModel>
@@ -54,61 +52,6 @@ private slots:
     void on_forwardLeft_clicked();
 
     void on_forwardRight_clicked();
-
-    //left context menu
-
-    void leftContextNewFile();
-
-    void leftContextNewFolder();
-
-    void leftContextCut();
-
-    void leftContextCopy();
-
-    void leftContextCopyFolderFiles();
-
-    void leftContextPaste();
-
-    void leftContextPasteRoot();
-
-    void leftContextDelete();
-
-    void leftContextInfo();
-
-    void smallLeftContextNewFile();
-
-    void smallLeftContextNewFolder();
-
-    void smallLeftContextInfo();
-
-    //Right context menu
-
-    void rightContextNewFile();
-
-    void rightContextNewFolder();
-
-    void rightContextCut();
-
-    void rightContextCopy();
-
-    void rightContextCopyFolderFiles();
-
-    void rightContextPaste();
-
-    void rightContextPasteRoot();
-
-    void rightContextDelete();
-
-    void rightContextInfo();
-
-    void smallRightContextNewFile();
-
-    void smallRightContextNewFolder();
-
-    void smallRightContextInfo();
-//
-
-    void deleteInfoPath(const QString path);
 
     void on_actionDark_triggered();
 
@@ -182,145 +125,34 @@ private slots:
 
     void on_rightView_activated(const QModelIndex &index);
 
+    /*******************************/
+    void setClipboardData(QMimeData *data);
+
 private:
     Ui::UnderCommander *ui;
-
     QFileSystemModel *leftModel;
     QFileSystemModel *rightModel;
     QDirModel *drivesModelLeft;
     QDirModel *drivesModelRight;
-
     ModelViewController *leftController;
     ModelViewController *rightController;
-
     QString defaultPath;
-    //QTimer *timer;
-    //QString leftCurrent;
-    //QString rightCurrent;
-    //QString textEditLeftCurrent;
-    //QString textEditRightCurrent;
-    //Navigation back and forward
-    //QStack<QString> leftStack;
-    //QStack<QString> rightStack;
-    //QStack<QString> forwardLeftStack;
-    //QStack<QString> forwardRightStack;
-    //bool restoredPathFlagLeft = false;
-    //bool restoredPathFlagRight = false;
-    //void clearLeftForwardStack();
-    //void clearRightForwardStack();
-
-    //QTextEdit save settings
-    //QColor textEditLeftColor;
-    //QColor textEditRightColor;
-    //QFont textEditLeftFont;
-    //QFont textEditRightFont;
-
-    //void saveTextEditsSettings();
-
-    //Change disk in comboBox
-    //void ifUserGoesToAnotherDiskLeft();
-    //void ifUserGoesToAnotherDiskRight();
-/**********************************************CONTEXT MENU*/
-    //Context menu info
-
-    //QStringList infoPath;
-
-    //bool contextCutFlag;
-
-    //QStringList copyPaths;
-    //copy_options askForCopyOptions();
-    //Left Context Menu
-    //QMenu *leftContextMenu;
-    //QMenu *newLeftMenu;
-    //QAction *leftOpenAction;
-    //QAction *leftPrintAction;
-//    QAction *leftNewFileAction;
-//    QAction *leftNewFolderAction;
-//    QAction *leftCutAction;
-//    QAction *leftCopyAction;
-//    QAction *leftCopyFolderFilesAction;
-//    QAction *leftPasteAction;
-//    QAction *leftPasteRootAction;
-//    QAction *leftDeleteAction;
-//    QAction *leftRenameAction;
-//    QAction *leftInfoAction;
-
-//    void displayLeft(QModelIndex index);
-//    void leftCopy();
-//    void clearMemoryLeftContextMenu();
-//    void createLeftContextMenu();
-
-    //Small left context menu
-//    QMenu *smallLeftContextMenu;
-//    QMenu *smallNewLeftMenu;
-//    QAction *smallLeftNewFileAction;
-//    QAction *smallLeftNewFolderAction;
-//    QAction *smallLeftPasteAction;
-//    QAction *smallLeftInfoAction;
-
-//    void clearMemorySmallLeftContextMenu();
-//    void createSmallLeftContextMenu();
-
-    //Right Context Menu
-//    QMenu *rightContextMenu;
-//    QMenu *newRightMenu;
-//    QAction *rightOpenAction;
-//    QAction *rightPrintAction;
-//    QAction *rightNewFileAction;
-//    QAction *rightNewFolderAction;
-//    QAction *rightCutAction;
-//    QAction *rightCopyAction;
-//    QAction *rightCopyFolderFilesAction;
-//    QAction *rightPasteAction;
-//    QAction *rightPasteRootAction;
-//    QAction *rightDeleteAction;
-//    QAction *rightRenameAction;
-//    QAction *rightInfoAction;
-
-//    void displayRight(QModelIndex index);
-//    void rightCopy();
-//    void clearMemoryRightContextMenu();
-//    void createRightContextMenu();
-
-    //Small right context menu
-//    QMenu *smallRightContextMenu;
-//    QMenu *smallNewRightMenu;
-//    QAction *smallRightNewFileAction;
-//    QAction *smallRightNewFolderAction;
-//    QAction *smallRightPasteAction;
-//    QAction *smallRightInfoAction;
-
-//    void clearMemorySmallRightContextMenu();
-//    void createSmallRightContextMenu();
-
-    //Create new file/folder
-//    QString newFileName;
-//    QString newFolderName;
-
     //Theme
     int curPalette = 0;
     QPalette defaultPalette;
     QPalette darkPalette;
-
-
     //Tabs
-//    tabs *tabBarLeft;
-//    tabs *tabBarRight;
-//    void createTabs();
-//    QMenu *leftTabMenu;
-//    QMenu *rightTabMenu;
-//    QAction *deleteTabLeftAction;
-//    QAction *deleteTabRightAction;
-//    void createTabMenuLeft();
-//    void createTabMenuRight();
+    tabs *tabBarLeft;
+    tabs *tabBarRight;
+    void createTabs();
+    QMenu *leftTabMenu;
+    QMenu *rightTabMenu;
+    QAction *deleteTabLeftAction;
+    QAction *deleteTabRightAction;
+    void createTabMenuLeft();
+    void createTabMenuRight();
 
     void initPalettes();
-
-//    void changeLeftRootPath(const QString &path);
-//    void changeRightRootPath(const QString &path);
-
-//    void resetBackForwardLeft();
-//    void resetBackForwardRight();
 };
 
 #endif // UNDERCOMMANDER_H

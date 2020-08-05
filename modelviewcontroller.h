@@ -176,6 +176,7 @@ signals:
     void creatingFolderErrorSignal(const QString &message);
     void removingFilesErrorSignal(const QString &message);
     void propertiesWarningSignal(const QString &message);
+    void setClipboardDataSignal(QMimeData *data);
 };
 
 #endif // MODELVIEWCONTROLLER_H

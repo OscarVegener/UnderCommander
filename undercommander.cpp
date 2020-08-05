@@ -25,6 +25,7 @@ UnderCommander::UnderCommander(QWidget *parent)
                                              this,
                                              "C:/",
                                              this);
+    connect(leftController, &ModelViewController::setClipboardDataSignal, this, &UnderCommander::setClipboardData);
     rightController = new ModelViewController(rightModel,
                                               drivesModelRight,
                                               ui->textEditRight,
@@ -36,9 +37,10 @@ UnderCommander::UnderCommander(QWidget *parent)
                                               this,
                                               "C:/",
                                               this);
+    connect(rightController, &ModelViewController::setClipboardDataSignal, this, &UnderCommander::setClipboardData);
     ui->rightWidget->hide();
     initPalettes();
-    //createTabs();
+    createTabs();
 }
 
 UnderCommander::~UnderCommander()
@@ -46,105 +48,44 @@ UnderCommander::~UnderCommander()
     delete ui;
 }
 
-//void UnderCommander::displayLeft(QModelIndex index)
-//{
-//    QString iPath = leftModel->fileInfo(index).absoluteFilePath();
-//    if (!infoPath.contains(iPath)){
-//        infoPath.push_back(iPath);
-//        info *window = new info(this, iPath);
-//        connect(window, &info::removePathFromList, this, &UnderCommander::deleteInfoPath);
-//        window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//        window->setModal(false);
-//        window->setAttribute(Qt::WA_DeleteOnClose);
-//        window->show();
-//    }
-//    else {
-//        QApplication::beep();
-//    }
-//}
+void UnderCommander::createTabs()
+{
+    createTabMenuLeft();
+    tabBarLeft = new tabs(ui->comboBoxLeft->currentText());
+    tabBarLeft->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(leftModel, &QFileSystemModel::rootPathChanged, tabBarLeft, &tabs::changeTabName);
+    connect(tabBarLeft, &tabs::tabBarClicked, this, &UnderCommander::tabBarLeftClick);
+    connect(tabBarLeft, &tabs::customContextMenuRequested, this, &UnderCommander::customTabMenuLeft);
+    ui->verticalLayout->insertWidget(1, tabBarLeft);
+    tabBarLeft->hide();
 
-//void UnderCommander::leftCopy()
-//{
-//    QModelIndexList indexList = ui->leftView->selectionModel()->selectedIndexes();
-//    QModelIndexList mimeList;
-//    foreach (QModelIndex idx, indexList){
-//        if(leftModel->fileInfo(idx).isFile()){
-//            mimeList.push_back(idx);
-//        }
-//    }
-//    QMimeData *data = leftModel->mimeData(mimeList);
-//    QApplication::clipboard()->setMimeData(data);
-//}
+    createTabMenuRight();
+    tabBarRight = new tabs(ui->comboBoxRight->currentText());
+    tabBarRight->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(rightModel, &QFileSystemModel::rootPathChanged, tabBarRight, &tabs::changeTabName);
+    connect(tabBarRight, &tabs::tabBarClicked, this, &UnderCommander::tabBarRightClick);
+    connect(tabBarRight, &tabs::customContextMenuRequested, this, &UnderCommander::customTabMenuRight);
+    ui->verticalLayout_2->insertWidget(1, tabBarRight);
+    tabBarRight->hide();
+}
 
-//void UnderCommander::displayRight(QModelIndex index)
-//{
-//    QString iPath = rightModel->fileInfo(index).absoluteFilePath();
-//    if (!infoPath.contains(iPath)){
-//        infoPath.push_back(iPath);
-//        info *window = new info(this, iPath);
-//        connect(window, &info::removePathFromList, this, &UnderCommander::deleteInfoPath);
-//        window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-//        window->setModal(false);
-//        window->setAttribute(Qt::WA_DeleteOnClose);
-//        window->show();
-//    }
-//    else {
-//        QApplication::beep();
-//    }
-//}
+void UnderCommander::createTabMenuLeft()
+{
+    leftTabMenu = new QMenu(this);
+    deleteTabLeftAction = new QAction(tr("Delete tab"), this);
+    deleteTabLeftAction->setToolTip("Delete current selected tab");
+    connect(deleteTabLeftAction, &QAction::triggered, this, &UnderCommander::deleteTabLeft);
+    leftTabMenu->addAction(deleteTabLeftAction);
+}
 
-//void UnderCommander::rightCopy()
-//{
-//    QModelIndexList indexList = ui->rightView->selectionModel()->selectedIndexes();
-//    QModelIndexList mimeList;
-//    foreach (QModelIndex idx, indexList){
-//        if(rightModel->fileInfo(idx).isFile()){
-//            mimeList.push_back(idx);
-//        }
-//    }
-//    QMimeData *data = rightModel->mimeData(mimeList);
-//    QApplication::clipboard()->setMimeData(data);
-//}
-
-
-//void UnderCommander::createTabs()
-//{
-//    createTabMenuLeft();
-//    tabBarLeft = new tabs(ui->comboBoxLeft->currentText());
-//    tabBarLeft->setContextMenuPolicy(Qt::CustomContextMenu);
-//    connect(leftModel, &QFileSystemModel::rootPathChanged, tabBarLeft, &tabs::changeTabName);
-//    connect(tabBarLeft, &tabs::tabBarClicked, this, &UnderCommander::tabBarLeftClick);
-//    connect(tabBarLeft, &tabs::customContextMenuRequested, this, &UnderCommander::customTabMenuLeft);
-//    ui->verticalLayout->insertWidget(1, tabBarLeft);
-//    tabBarLeft->hide();
-
-//    createTabMenuRight();
-//    tabBarRight = new tabs(ui->comboBoxRight->currentText());
-//    tabBarRight->setContextMenuPolicy(Qt::CustomContextMenu);
-//    connect(rightModel, &QFileSystemModel::rootPathChanged, tabBarRight, &tabs::changeTabName);
-//    connect(tabBarRight, &tabs::tabBarClicked, this, &UnderCommander::tabBarRightClick);
-//    connect(tabBarRight, &tabs::customContextMenuRequested, this, &UnderCommander::customTabMenuRight);
-//    ui->verticalLayout_2->insertWidget(1, tabBarRight);
-//    tabBarRight->hide();
-//}
-
-//void UnderCommander::createTabMenuLeft()
-//{
-//    leftTabMenu = new QMenu(this);
-//    deleteTabLeftAction = new QAction(tr("Delete tab"), this);
-//    deleteTabLeftAction->setToolTip("Delete current selected tab");
-//    connect(deleteTabLeftAction, &QAction::triggered, this, &UnderCommander::deleteTabLeft);
-//    leftTabMenu->addAction(deleteTabLeftAction);
-//}
-
-//void UnderCommander::createTabMenuRight()
-//{
-//    rightTabMenu = new QMenu(this);
-//    deleteTabRightAction = new QAction(tr("Delete tab"), this);
-//    deleteTabRightAction->setToolTip("Delete current selected tab");
-//    connect(deleteTabRightAction, &QAction::triggered, this, &UnderCommander::deleteTabRight);
-//    rightTabMenu->addAction(deleteTabRightAction);
-//}
+void UnderCommander::createTabMenuRight()
+{
+    rightTabMenu = new QMenu(this);
+    deleteTabRightAction = new QAction(tr("Delete tab"), this);
+    deleteTabRightAction->setToolTip("Delete current selected tab");
+    connect(deleteTabRightAction, &QAction::triggered, this, &UnderCommander::deleteTabRight);
+    rightTabMenu->addAction(deleteTabRightAction);
+}
 
 void UnderCommander::initPalettes()
 {
@@ -212,141 +153,6 @@ void UnderCommander::on_forwardRight_clicked()
     rightController->forward();
 }
 
-void UnderCommander::leftContextNewFile()
-{
-}
-
-void UnderCommander::leftContextNewFolder()
-{
-}
-
-void UnderCommander::leftContextCut()
-{
-
-}
-
-void UnderCommander::leftContextCopy()
-{
-    //leftCopy();
-}
-
-void UnderCommander::leftContextCopyFolderFiles()
-{
-//    contextCutFlag = false;
-//    copyPaths.clear();
-//    QModelIndexList list = ui->leftView->selectionModel()->selectedRows();
-//    foreach (QModelIndex idx, list){
-//        copyPaths.push_back(leftModel->fileInfo(idx).absoluteFilePath());
-//    }
-//    qDebug() << copyPaths;
-}
-
-void UnderCommander::leftContextPaste()
-{
-
-}
-
-void UnderCommander::leftContextPasteRoot()
-{
-
-}
-
-void UnderCommander::leftContextDelete() //to do
-{
-
-}
-
-void UnderCommander::leftContextInfo()
-{
-    //displayLeft(ui->leftView->currentIndex());
-}
-
-void UnderCommander::smallLeftContextNewFile()
-{
-
-}
-
-void UnderCommander::smallLeftContextNewFolder()
-{
-
-}
-
-void UnderCommander::smallLeftContextInfo()
-{
-    //displayLeft(ui->leftView->rootIndex());
-}
-
-void UnderCommander::rightContextNewFile()
-{
-
-}
-
-void UnderCommander::rightContextNewFolder()
-{
-
-}
-
-void UnderCommander::rightContextCut()
-{
-
-}
-
-void UnderCommander::rightContextCopy()
-{
-    //rightCopy();
-}
-
-void UnderCommander::rightContextCopyFolderFiles()
-{
-//    contextCutFlag = false;
-//    copyPaths.clear();
-//    QModelIndexList list = ui->rightView->selectionModel()->selectedRows();
-//    foreach (QModelIndex idx, list){
-//        copyPaths.push_back(rightModel->fileInfo(idx).absoluteFilePath());
-//    }
-//    qDebug() << copyPaths;
-}
-
-void UnderCommander::rightContextPaste()
-{
-
-}
-
-void UnderCommander::rightContextPasteRoot()
-{
-
-}
-
-void UnderCommander::rightContextDelete()
-{
-
-}
-
-void UnderCommander::rightContextInfo()
-{
-    //displayRight(ui->rightView->currentIndex());
-}
-
-void UnderCommander::smallRightContextNewFile()
-{
-
-}
-
-void UnderCommander::smallRightContextNewFolder()
-{
-
-}
-
-void UnderCommander::smallRightContextInfo()
-{
-    //displayRight(ui->rightView->rootIndex());
-}
-
-void UnderCommander::deleteInfoPath(const QString path)
-{
-    //infoPath.removeAt(infoPath.indexOf(path));
-}
-
 //Menubar
 
 void UnderCommander::on_actionDark_triggered()
@@ -368,7 +174,7 @@ void UnderCommander::on_actionDefault_triggered()
 void UnderCommander::on_actionShow_only_files_triggered()
 {
     //QModelIndexList list = ui->leftView->selectionModel()->selectedIndexes();
-    ui->leftView->selectionModel()->reset();
+    //ui->leftView->selectionModel()->reset();
     if (leftModel->filter() != QDir::Files){
         leftModel->setFilter(QDir::Files);
     }
@@ -411,21 +217,22 @@ void UnderCommander::on_actionShow_files_and_folders_2_triggered()
 
 void UnderCommander::on_actionCreate_tab_triggered()
 {
-    //tabBarLeft->createTab(ui->comboBoxLeft->currentText() + "/");
+    tabBarLeft->createTab(leftController->getDefaultPath());
 }
 
 void UnderCommander::on_actionNew_right_tab_triggered()
 {
-    //tabBarRight->createTab(ui->comboBoxRight->currentText() + "/");
+    tabBarRight->createTab(rightController->getDefaultPath());
 }
 
 void UnderCommander::tabBarLeftClick(int index)
 {
-//    if (index >= 0){
-//        //qDebug() << index;
-//        tabBarLeft->setCurrentIndex(index);
-//        tabBarLeft->setCurrentTab(index);
-//        QString path = tabBarLeft->savedPath(index);
+    if (index >= 0){
+        //qDebug() << index;
+        tabBarLeft->setCurrentIndex(index);
+        tabBarLeft->setCurrentTab(index);
+        QString path = tabBarLeft->savedPath(index);
+        leftController->go(path);
 //        QDir dir(path);
 //        if (dir.exists()){
 //            ui->leftView->setRootIndex(leftModel->setRootPath(path));
@@ -448,8 +255,8 @@ void UnderCommander::tabBarLeftClick(int index)
 //            tabBarLeft->setCurrentTab(index);
 //            tabBarLeft->setCurrentIndex(index);
 //        }
-//        //qDebug() << path;
-//    }
+        //qDebug() << path;
+    }
 }
 
 void UnderCommander::tabBarRightClick(int index)
@@ -488,12 +295,12 @@ void UnderCommander::tabBarRightClick(int index)
 void UnderCommander::on_actionEnable_tabs_triggered()
 {
     if (ui->actionEnable_tabs->isChecked()){
-        //tabBarLeft->show();
-        //tabBarRight->show();
+        tabBarLeft->show();
+        tabBarRight->show();
     }
     else{
-        //tabBarLeft->hide();
-        //tabBarRight->hide();
+        tabBarLeft->hide();
+        tabBarRight->hide();
     }
 }
 
@@ -504,11 +311,11 @@ void UnderCommander::on_actionExit_triggered()
 
 void UnderCommander::customTabMenuLeft(QPoint pos)
 {
-//    deleteTabLeftAction->setEnabled(true);
-//    if (tabBarLeft->count() == 1){
-//        deleteTabLeftAction->setEnabled(false);
-//    }
-//    leftTabMenu->popup(QCursor::pos());
+    deleteTabLeftAction->setEnabled(true);
+    if (tabBarLeft->count() == 1){
+        deleteTabLeftAction->setEnabled(false);
+    }
+    leftTabMenu->popup(QCursor::pos());
 }
 
 void UnderCommander::customTabMenuRight(QPoint pos)
@@ -586,22 +393,22 @@ void UnderCommander::deleteTabRight()
 
 void UnderCommander::on_actionNew_file_triggered()
 {
-    smallLeftContextNewFile();
+    //smallLeftContextNewFile();
 }
 
 void UnderCommander::on_actionNew_folder_triggered()
 {
-    smallLeftContextNewFolder();
+    //smallLeftContextNewFolder();
 }
 
 void UnderCommander::on_actionNew_file_3_triggered()
 {
-    smallRightContextNewFile();
+    //smallRightContextNewFile();
 }
 
 void UnderCommander::on_actionNew_folder_2_triggered()
 {
-    smallRightContextNewFolder();
+    //smallRightContextNewFolder();
 }
 
 void UnderCommander::on_actionOpen_directory_left_triggered()
@@ -703,4 +510,9 @@ void UnderCommander::on_leftView_activated(const QModelIndex &index)
 void UnderCommander::on_rightView_activated(const QModelIndex &index)
 {
     rightController->open(index);
+}
+
+void UnderCommander::setClipboardData(QMimeData *data)
+{
+    QApplication::clipboard()->setMimeData(data);
 }
