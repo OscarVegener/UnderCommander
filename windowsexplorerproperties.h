@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <qt_windows.h>
-#include <QDebug>
 
 class WindowsExplorerProperties
 {

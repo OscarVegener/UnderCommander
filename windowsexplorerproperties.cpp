@@ -6,7 +6,6 @@ WindowsExplorerProperties::WindowsExplorerProperties(QString &path)
         info.cbSize = sizeof info;
         file = new wchar_t[path.length() + 1];
         file[path.length()] = '\0';
-        qDebug() << file;
         path.toWCharArray(file);
         info.lpFile = file;
         info.nShow = SW_SHOW;
