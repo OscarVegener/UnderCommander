@@ -50,41 +50,12 @@ UnderCommander::~UnderCommander()
 
 void UnderCommander::createTabs()
 {
-    createTabMenuLeft();
-    tabBarLeft = new tabs(ui->comboBoxLeft->currentText());
-    tabBarLeft->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(leftModel, &QFileSystemModel::rootPathChanged, tabBarLeft, &tabs::changeTabName);
-    connect(tabBarLeft, &tabs::tabBarClicked, this, &UnderCommander::tabBarLeftClick);
-    connect(tabBarLeft, &tabs::customContextMenuRequested, this, &UnderCommander::customTabMenuLeft);
+    tabBarLeft = new tabs(leftController->getDefaultPath(), leftController, "C:\\", this);
+    connect(leftController, &ModelViewController::currentPathChanged, tabBarLeft, &tabs::changeTabName);
     ui->verticalLayout->insertWidget(1, tabBarLeft);
-    tabBarLeft->hide();
-
-    createTabMenuRight();
-    tabBarRight = new tabs(ui->comboBoxRight->currentText());
-    tabBarRight->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(rightModel, &QFileSystemModel::rootPathChanged, tabBarRight, &tabs::changeTabName);
-    connect(tabBarRight, &tabs::tabBarClicked, this, &UnderCommander::tabBarRightClick);
-    connect(tabBarRight, &tabs::customContextMenuRequested, this, &UnderCommander::customTabMenuRight);
-    ui->verticalLayout_2->insertWidget(1, tabBarRight);
-    tabBarRight->hide();
-}
-
-void UnderCommander::createTabMenuLeft()
-{
-    leftTabMenu = new QMenu(this);
-    deleteTabLeftAction = new QAction(tr("Delete tab"), this);
-    deleteTabLeftAction->setToolTip("Delete current selected tab");
-    connect(deleteTabLeftAction, &QAction::triggered, this, &UnderCommander::deleteTabLeft);
-    leftTabMenu->addAction(deleteTabLeftAction);
-}
-
-void UnderCommander::createTabMenuRight()
-{
-    rightTabMenu = new QMenu(this);
-    deleteTabRightAction = new QAction(tr("Delete tab"), this);
-    deleteTabRightAction->setToolTip("Delete current selected tab");
-    connect(deleteTabRightAction, &QAction::triggered, this, &UnderCommander::deleteTabRight);
-    rightTabMenu->addAction(deleteTabRightAction);
+    tabBarRight = new tabs(rightController->getDefaultPath(), rightController, "C:\\", this);
+    connect(rightController, &ModelViewController::currentPathChanged, tabBarRight, &tabs::changeTabName);
+    ui->verticalLayout->insertWidget(1, tabBarRight);
 }
 
 void UnderCommander::initPalettes()
@@ -225,170 +196,21 @@ void UnderCommander::on_actionNew_right_tab_triggered()
     tabBarRight->createTab(rightController->getDefaultPath());
 }
 
-void UnderCommander::tabBarLeftClick(int index)
-{
-    if (index >= 0){
-        //qDebug() << index;
-        tabBarLeft->setCurrentIndex(index);
-        tabBarLeft->setCurrentTab(index);
-        QString path = tabBarLeft->savedPath(index);
-        leftController->go(path);
-//        QDir dir(path);
-//        if (dir.exists()){
-//            ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//            leftCurrent = path;
-//            ui->textEditLeft->setText(path);
-//            QString comboPath;
-//            comboPath.push_back(path.at(0));
-//            comboPath.push_back(path.at(1));
-//            int index = ui->comboBoxLeft->findText(comboPath);
-//            ui->comboBoxLeft->setCurrentIndex(index);
-//        }
-//        else{
-//            path = ui->comboBoxLeft->currentText() + "/";
-//            ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//            leftCurrent = path;
-//            ui->textEditLeft->setText(path);
-//            tabBarLeft->resetTab(index, path);
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Folder was removed!");
-//            tabBarLeft->setCurrentTab(index);
-//            tabBarLeft->setCurrentIndex(index);
-//        }
-        //qDebug() << path;
-    }
-}
-
-void UnderCommander::tabBarRightClick(int index)
-{
-//    if (index >= 0){
-//        //qDebug() << index;
-//        tabBarRight->setCurrentIndex(index);
-//        tabBarRight->setCurrentTab(index);
-//        QString path = tabBarRight->savedPath(index);
-//        QDir dir(path);
-//        if (dir.exists()){
-//            ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//            rightCurrent = path;
-//            ui->textEditRight->setText(path);
-//            QString comboPath;
-//            comboPath.push_back(path.at(0));
-//            comboPath.push_back(path.at(1));
-//            int index = ui->comboBoxRight->findText(comboPath);
-//            ui->comboBoxRight->setCurrentIndex(index);
-//        }
-//        else{
-//            path = ui->comboBoxRight->currentText() + "/";
-//            ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//            rightCurrent = path;
-//            ui->textEditRight->setText(path);
-//            tabBarRight->resetTab(index, path);
-//            QApplication::beep();
-//            QMessageBox::warning(this, "UnderCommander", "Folder was removed!");
-//            tabBarRight->setCurrentTab(index);
-//            tabBarRight->setCurrentIndex(index);
-//        }
-//        //qDebug() << path;
-//    }
-}
-
 void UnderCommander::on_actionEnable_tabs_triggered()
 {
     if (ui->actionEnable_tabs->isChecked()){
         tabBarLeft->show();
-        tabBarRight->show();
+        //tabBarRight->show();
     }
     else{
         tabBarLeft->hide();
-        tabBarRight->hide();
+        //tabBarRight->hide();
     }
 }
 
 void UnderCommander::on_actionExit_triggered()
 {
     QApplication::quit();
-}
-
-void UnderCommander::customTabMenuLeft(QPoint pos)
-{
-    deleteTabLeftAction->setEnabled(true);
-    if (tabBarLeft->count() == 1){
-        deleteTabLeftAction->setEnabled(false);
-    }
-    leftTabMenu->popup(QCursor::pos());
-}
-
-void UnderCommander::customTabMenuRight(QPoint pos)
-{
-//    deleteTabRightAction->setEnabled(true);
-//    if (tabBarRight->count() == 1){
-//        deleteTabRightAction->setEnabled(false);
-//    }
-//    rightTabMenu->popup(QCursor::pos());
-}
-
-void UnderCommander::deleteTabLeft()
-{
-//    tabBarLeft->deleteTab(tabBarLeft->currentIndex());
-//    int index = tabBarLeft->currentIndex();
-
-//    tabBarLeft->setCurrentTab(index);
-//    QString path = tabBarLeft->savedPath(index);
-//    QDir dir(path);
-//    if (dir.exists()){
-//        ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//        leftCurrent = path;
-//        ui->textEditLeft->setText(path);
-//        QString comboPath;
-//        comboPath.push_back(path.at(0));
-//        comboPath.push_back(path.at(1));
-//        int index = ui->comboBoxLeft->findText(comboPath);
-//        ui->comboBoxLeft->setCurrentIndex(index);
-//    }
-//    else{
-//        path = ui->comboBoxLeft->currentText() + "/";
-//        ui->leftView->setRootIndex(leftModel->setRootPath(path));
-//        leftCurrent = path;
-//        ui->textEditLeft->setText(path);
-//        tabBarLeft->resetTab(index, path);
-//        QApplication::beep();
-//        QMessageBox::warning(this, "UnderCommander", "Folder was removed!");
-//        tabBarLeft->setCurrentTab(index);
-//        tabBarLeft->setCurrentIndex(index);
-//    //qDebug() << path;
-//    }
-}
-
-void UnderCommander::deleteTabRight()
-{
-//    tabBarRight->deleteTab(tabBarRight->currentIndex());
-//    int index = tabBarRight->currentIndex();
-
-//    tabBarRight->setCurrentTab(index);
-//    QString path = tabBarRight->savedPath(index);
-//    QDir dir(path);
-//    if (dir.exists()){
-//        ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//        rightCurrent = path;
-//        ui->textEditRight->setText(path);
-//        QString comboPath;
-//        comboPath.push_back(path.at(0));
-//        comboPath.push_back(path.at(1));
-//        int index = ui->comboBoxRight->findText(comboPath);
-//        ui->comboBoxRight->setCurrentIndex(index);
-//    }
-//    else{
-//        path = ui->comboBoxRight->currentText() + "/";
-//        ui->rightView->setRootIndex(rightModel->setRootPath(path));
-//        rightCurrent = path;
-//        ui->textEditRight->setText(path);
-//        tabBarRight->resetTab(index, path);
-//        QApplication::beep();
-//        QMessageBox::warning(this, "UnderCommander", "Folder was removed!");
-//        tabBarRight->setCurrentTab(index);
-//        tabBarRight->setCurrentIndex(index);
-//    //qDebug() << path;
-//    }
 }
 
 void UnderCommander::on_actionNew_file_triggered()
@@ -505,7 +327,6 @@ void UnderCommander::on_leftView_activated(const QModelIndex &index)
 {
     leftController->open(index);
 }
-
 
 void UnderCommander::on_rightView_activated(const QModelIndex &index)
 {

@@ -75,21 +75,9 @@ private slots:
 
     //Tabs
 
-    void tabBarLeftClick(int index);
-
-    void tabBarRightClick(int index);
-
     void on_actionEnable_tabs_triggered();
 
     void on_actionExit_triggered();
-
-    void customTabMenuLeft(QPoint pos);
-
-    void customTabMenuRight(QPoint pos);
-
-    void deleteTabLeft();
-
-    void deleteTabRight();
 
     void on_actionNew_file_triggered();
 

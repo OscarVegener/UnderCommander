@@ -1,9 +1,26 @@
 #include "tabs.h"
 
-tabs::tabs()
-{
-
+tabs::tabs(const QString name, ModelViewController *controller, const QString defaultPath, QWidget *parent) : QTabBar(parent){
+    if (controller != nullptr){
+        Controller = controller;
+        DefaultPath = defaultPath;
+        tabMenu = new QMenu(this);
+        Id = objectCount++;
+        deleteAction = new QAction(tr("Delete tab"), this);
+        connect(deleteAction, &QAction::triggered, this, &tabs::contextDeleteTab);
+        tabMenu->addAction(deleteAction);
+        setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(this, &tabs::tabBarClicked, this, &tabs::tabClicked);
+        connect(this, &tabs::customContextMenuRequested, this, &tabs::showContextMenu);
+        hide();
+        init(name);
+    }
+    else{
+        emit argumentIsNullSignal(createIdMessage("Argument in \"tabs\" is nullptr."));
+    }
 }
+
+int tabs::objectCount= 0;
 
 void tabs::setCurrentTab(int c){
     currentTab = c;
@@ -12,7 +29,6 @@ void tabs::setCurrentTab(int c){
 void tabs::createTab(const QString name)
 {
     paths.push_back(name);
-    //qDebug() << name;
     QFileInfo fileInfo;
     fileInfo.setFile(name);
     if (fileInfo.fileName() != ""){
@@ -53,10 +69,10 @@ void tabs::resetTab(int index, QString name)
 void tabs::deleteTab(int index)
 {
     paths.removeAt(index);
-    this->removeTab(index);
+    removeTab(index);
 }
 
-int tabs::getCurrentTab()
+int tabs::getCurrentTab() const
 {
     return currentTab;
 }
@@ -67,7 +83,6 @@ void tabs::changeTabName(const QString &name)
     fileInfo.setFile(name);
     paths.removeAt(currentTab);
     paths.insert(currentTab, name);
-    //qDebug() << paths;
     if (fileInfo.fileName() != ""){
         this->setTabText(currentTab, fileInfo.fileName());
     }
@@ -88,4 +103,73 @@ void tabs::init(const QString name)
     this->setExpanding(false);
     this->setSelectionBehaviorOnRemove(SelectLeftTab);
     this->createTab(name);
+}
+
+ModelViewController *tabs::getController() const
+{
+    return Controller;
+}
+
+void tabs::setController(ModelViewController *value)
+{
+    Controller = value;
+}
+
+QString tabs::getDefaultPath() const
+{
+    return DefaultPath;
+}
+
+void tabs::setDefaultPath(const QString &value)
+{
+    DefaultPath = value;
+}
+
+void tabs::tabClicked(int index)
+{
+    if (index >= 0){
+        setCurrentIndex(index);
+        setCurrentTab(index);
+        QString path = savedPath(index);
+        QDir dir(path);
+        if (dir.exists()){
+            Controller->go(path);
+        }
+        else{
+            Controller->go(DefaultPath);
+            emit incorrectPathSignal(path);
+        }
+    }
+}
+
+void tabs::showContextMenu(QPoint pos)
+{
+    if (count() == 1){
+        deleteAction->setEnabled(false);
+    }
+    else{
+        deleteAction->setEnabled(true);
+    }
+    tabMenu->popup(QCursor::pos());
+}
+
+void tabs::contextDeleteTab()
+{
+    deleteTab(currentIndex());
+    int index = currentIndex();
+    setCurrentTab(index);
+    QString path = savedPath(index);
+    QDir dir(path);
+    if (dir.exists()){
+        Controller->go(path);
+    }
+    else{
+        Controller->go(DefaultPath);
+        emit incorrectPathSignal(path);
+    }
+}
+
+QString tabs::createIdMessage(QString m)
+{
+    return "{Id: " + QString::number(Id) + "} " + m;
 }

@@ -164,14 +164,15 @@ private slots:
 
 signals:
     void rootIndexChanged(const QModelIndex &index);
+    void currentPathChanged(const QString &newPath);
     void indexErrorSignal(const QString &message);
-    void ArgumentIsNullSignal(const QString &message);
-    void ArgumentIsInvalid(const QString &message);
-    void IncorrectDefaultPathSignal(const QString &message);
-    void StatusBarMessageSignal(const QString &message);
-    void IncorrectIdSignal(const QString &message);
-    void StackLimitReachedSignal(const QString &message);
-    void WarningSignal(const QString &message);
+    void argumentIsNullSignal(const QString &message);
+    void argumentIsInvalid(const QString &message);
+    void incorrectDefaultPathSignal(const QString &message);
+    void statusBarMessageSignal(const QString &message);
+    void incorrectIdSignal(const QString &message);
+    void stackLimitReachedSignal(const QString &message);
+    void warningSignal(const QString &message);
     void creatingFileErrorSignal(const QString &message);
     void creatingFolderErrorSignal(const QString &message);
     void removingFilesErrorSignal(const QString &message);

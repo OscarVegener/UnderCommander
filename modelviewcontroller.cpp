@@ -34,13 +34,13 @@ ModelViewController::ModelViewController(QFileSystemModel *fsModel,
         Window = window;
     }
     else{
-        emit ArgumentIsNullSignal(createIdMessage("Some arguments in ModelViewController's constructor is Null."));
+        emit argumentIsNullSignal(createIdMessage("Some arguments in ModelViewController's constructor is Null."));
     }
     if (!defaultPath.isNull() && QDir(defaultPath).exists()){
         DefaultPath = defaultPath;
     }
     else{
-        emit IncorrectDefaultPathSignal(createIdMessage("Current default path does not exist."));
+        emit incorrectDefaultPathSignal(createIdMessage("Current default path does not exist."));
     }
     initFsModel();
     initDriveModel();
@@ -177,7 +177,7 @@ void ModelViewController::open(const QModelIndex index)
     if (backStack.count() == backStackLimit){
         backStack.clear();
         backStack.push(DefaultPath);
-        emit StackLimitReachedSignal("backStack limit reached, stack is cleared!");
+        emit stackLimitReachedSignal("backStack limit reached, stack is cleared!");
     }
     if  (fileInfo.isDir() && backStack.count() >=1 && !BackButton->isEnabled()){
         BackButton->setEnabled(true);
@@ -232,13 +232,13 @@ void ModelViewController::back()
 {
     if (forwardStack.count() == forwardStackLimit){
         clearForwardStack();
-        emit WarningSignal(createIdMessage("forwardStack limit reached, stack is cleared!"));
+        emit warningSignal(createIdMessage("forwardStack limit reached, stack is cleared!"));
     }
     if (!backStack.isEmpty() && backStack.count() != 1){
         QString path = backStack.pop();
         if (!QDir(path).exists()){
             resetBackForwardNavigation();
-            emit WarningSignal(createIdMessage("Previous path does not exist!"));
+            emit warningSignal(createIdMessage("Previous path does not exist!"));
         }
         else{
             restoredPathFlag = true;
@@ -263,13 +263,13 @@ void ModelViewController::forward()
     if (backStack.count() == backStackLimit){
         backStack.clear();
         backStack.push(DefaultPath);
-        emit StackLimitReachedSignal("backStack limit reached, stack is cleared!");
+        emit stackLimitReachedSignal("backStack limit reached, stack is cleared!");
     }
     if (!forwardStack.isEmpty()){
         QString path = forwardStack.pop();
         if (!QDir(path).exists()){
             resetBackForwardNavigation();
-            emit WarningSignal(createIdMessage("Path does not exist!"));
+            emit warningSignal(createIdMessage("Path does not exist!"));
         }
         else{
             restoredPathFlag = true;
@@ -322,12 +322,12 @@ void ModelViewController::go(const QString path)
         }
         else if (dir.absolutePath() != FsModel->filePath(FsViewModel->rootIndex())){
             DisplayedPathLineEdit->setText(displayedPathCurrent);
-            emit WarningSignal(createIdMessage("Can't find the path provided. Check spelling and try again!"));
+            emit warningSignal(createIdMessage("Can't find the path provided. Check spelling and try again!"));
         }
     }
     else{
         DisplayedPathLineEdit->setText(displayedPathCurrent);
-        emit ArgumentIsInvalid(createIdMessage("Argument for \"go\" function is invalid."));
+        emit argumentIsInvalid(createIdMessage("Argument for \"go\" function is invalid."));
     }
 }
 
@@ -400,7 +400,7 @@ void ModelViewController::clearForwardStack()
         ForwardButton->setEnabled(false);
     }
     restoredPathFlag = false;
-    emit StatusBarMessageSignal(createIdMessage("ForwardStack is cleared."));
+    emit statusBarMessageSignal(createIdMessage("ForwardStack is cleared."));
 }
 
 void ModelViewController::resetBackForwardNavigation()
@@ -409,7 +409,7 @@ void ModelViewController::resetBackForwardNavigation()
     backStack.clear();
     backStack.push_back(FsModel->rootPath());
     clearForwardStack();
-    emit StatusBarMessageSignal(createIdMessage("There was some errors. BackForwardNavigation is reset."));
+    emit statusBarMessageSignal(createIdMessage("There was some errors. BackForwardNavigation is reset."));
 }
 
 void ModelViewController::saveTextEditsSettings()
@@ -519,13 +519,10 @@ void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
 {
     if (index.isValid()){
         QString newPath = FsModel->filePath(index);
-        qDebug() << "newPath(rootIndex changed): " << newPath;
         DisplayedPathLineEdit->setText(newPath);
         QString comboPath;
         comboPath.push_back(newPath.at(0));
         comboPath.push_back(newPath.at(1));
-        qDebug() << "RootPath: " << FsModel->rootPath();
-        qDebug() << "ComboPath: " << comboPath;
         if (FsModel->rootPath() != (comboPath + "/")){
             FsModel->setRootPath(comboPath + "/");
         }
@@ -541,6 +538,7 @@ void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
         }
         displayedPathCurrent = DisplayedPathLineEdit->text();
         currentPath = newPath;
+        emit currentPathChanged(newPath);
     }
     else{
         emit indexErrorSignal(createIdMessage("Index error happened when changing root"));
