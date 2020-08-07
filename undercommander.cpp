@@ -38,7 +38,7 @@ UnderCommander::UnderCommander(QWidget *parent)
                                               "C:/",
                                               this);
     connect(rightController, &ModelViewController::setClipboardDataSignal, this, &UnderCommander::setClipboardData);
-    ui->rightWidget->hide();
+    //ui->rightWidget->hide();
     initPalettes();
     createTabs();
 }
@@ -52,10 +52,12 @@ void UnderCommander::createTabs()
 {
     tabBarLeft = new tabs(leftController->getDefaultPath(), leftController, "C:\\", this);
     connect(leftController, &ModelViewController::currentPathChanged, tabBarLeft, &tabs::changeTabName);
-    ui->verticalLayout->insertWidget(1, tabBarLeft);
     tabBarRight = new tabs(rightController->getDefaultPath(), rightController, "C:\\", this);
     connect(rightController, &ModelViewController::currentPathChanged, tabBarRight, &tabs::changeTabName);
-    ui->verticalLayout->insertWidget(1, tabBarRight);
+    ui->verticalLayout_5->insertWidget(0, tabBarLeft);
+    ui->verticalLayout_5->setSpacing(0);
+    ui->verticalLayout_6->insertWidget(0, tabBarRight);
+    ui->verticalLayout_6->setSpacing(0);
 }
 
 void UnderCommander::initPalettes()
@@ -200,11 +202,11 @@ void UnderCommander::on_actionEnable_tabs_triggered()
 {
     if (ui->actionEnable_tabs->isChecked()){
         tabBarLeft->show();
-        //tabBarRight->show();
+        tabBarRight->show();
     }
     else{
         tabBarLeft->hide();
-        //tabBarRight->hide();
+        tabBarRight->hide();
     }
 }
 
