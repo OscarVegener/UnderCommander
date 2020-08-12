@@ -360,15 +360,13 @@ void ModelViewController::openFile(const QString &path)
 void ModelViewController::pasteToRoot(const QString &root)
 {
     if(exists(root.toStdString())){
-        copy_options options = askForCopyOptions();
         foreach (QString source, copyPaths){
             if (exists(source.toStdString())){
                 CopyingStatusWindow *window = new CopyingStatusWindow(source, root, contextCutFlag);
-                window->setOptions(options);
                 window->setSkip(true);
-                window->setModal(true);
+                window->setModal(false);
                 window->setAttribute(Qt::WA_DeleteOnClose);
-                window->exec();
+                window->show();
             }
         }
     }
@@ -771,15 +769,13 @@ void ModelViewController::contextPaste()
     }
     else if(fileInfo.isDir()){
         QString dest = fileInfo.absoluteFilePath();
-        copy_options options = askForCopyOptions();
         foreach (QString source, copyPaths){
             if (exists(source.toStdString())){
                 CopyingStatusWindow *window = new CopyingStatusWindow(source, dest, contextCutFlag);
-                window->setOptions(options);
                 window->setSkip(true);
-                window->setModal(true);
+                window->setModal(false);
                 window->setAttribute(Qt::WA_DeleteOnClose);
-                window->exec();
+                window->show();
             }
         }
     }

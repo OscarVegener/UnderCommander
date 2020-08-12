@@ -15,9 +15,7 @@ class calcSize : public QObject
 
 public:
     bool Finished() const;
-
     bool Stop() const;
-
     bool Pause() const;
 
 private:
@@ -26,18 +24,14 @@ private:
     QFileInfo fileInfo;
 
     bool m_Finished;
-
     bool m_Stop;
-
     bool m_Pause;
 
 public slots:
     void displaySizeUC(const QFileInfo fileInfo);
 
     void setFinished(bool Finished);
-
     void setStop(bool Stop);
-
     void setPause(bool Pause);
 
 signals:
