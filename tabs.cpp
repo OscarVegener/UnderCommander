@@ -8,7 +8,10 @@ tabs::tabs(const QString name, ModelViewController *controller, const QString de
         Id = objectCount++;
         deleteAction = new QAction(tr("Delete tab"), this);
         connect(deleteAction, &QAction::triggered, this, &tabs::contextDeleteTab);
+        infoAction = new QAction(tr("Properties"), this);
+        connect(infoAction, &QAction::triggered, this, &tabs::contextInfo);
         tabMenu->addAction(deleteAction);
+        tabMenu->addAction(infoAction);
         setContextMenuPolicy(Qt::CustomContextMenu);
         connect(this, &tabs::tabBarClicked, this, &tabs::tabClicked);
         connect(this, &tabs::customContextMenuRequested, this, &tabs::showContextMenu);
@@ -167,6 +170,11 @@ void tabs::contextDeleteTab()
         Controller->go(DefaultPath);
         emit incorrectPathSignal(path);
     }
+}
+
+void tabs::contextInfo()
+{
+    Controller->showInfo(paths.at(currentTab));
 }
 
 QString tabs::createIdMessage(QString m)

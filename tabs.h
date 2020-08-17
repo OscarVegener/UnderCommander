@@ -32,6 +32,7 @@ private:
     QStringList paths;
     QMenu *tabMenu;
     QAction *deleteAction;
+    QAction *infoAction;
     QString DefaultPath;
     ModelViewController *Controller;
     int Id;
@@ -45,6 +46,7 @@ private:
     void showContextMenu(QPoint pos);
 
     void contextDeleteTab();
+    void contextInfo();
     QString createIdMessage(QString m);
 signals:
     void argumentIsNullSignal(const QString &message);

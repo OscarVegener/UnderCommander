@@ -83,6 +83,9 @@ public:
     void go(const QString path);
     void changeDrive(const QString path);
 
+    //properties window for external use
+    void showInfo(const QString &infoPath);
+
     //Resets all to basic state
     void resetModelViewController(); //todo
 

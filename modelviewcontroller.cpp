@@ -386,6 +386,22 @@ void ModelViewController::clearCurrentIndexSelection()
     FsViewModel->selectionModel()->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 }
 
+void ModelViewController::showInfo(const QString &infoPath)
+{
+    if (!infoPaths.contains(infoPath)){
+        infoPaths.push_back(infoPath);
+        info *window = new info(Window, infoPath);
+        connect(window, &info::removePathFromList, this, &ModelViewController::deleteInfoPath);
+        window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+        window->setModal(false);
+        window->setAttribute(Qt::WA_DeleteOnClose);
+        window->show();
+    }
+    else {
+        emit propertiesWarningSignal(createIdMessage("Properties window is already opened for this entry."));
+    }
+}
+
 QString ModelViewController::createIdMessage(QString m)
 {
     return "{Id: " + QString::number(Id) + "} " + m;
@@ -872,34 +888,12 @@ void ModelViewController::contextInfo()
     QModelIndex curIndex = FsViewModel->selectionModel()->currentIndex();
     if (FsViewModel->selectionModel()->selectedRows().contains(curIndex)){
         QString infoPath = FsModel->fileInfo(curIndex).absoluteFilePath();
-        if (!infoPaths.contains(infoPath)){
-            infoPaths.push_back(infoPath);
-            info *window = new info(Window, infoPath);
-            connect(window, &info::removePathFromList, this, &ModelViewController::deleteInfoPath);
-            window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-            window->setModal(false);
-            window->setAttribute(Qt::WA_DeleteOnClose);
-            window->show();
-        }
-        else {
-            emit propertiesWarningSignal(createIdMessage("Properties window is already opened for this entry."));
-        }
+        showInfo(infoPath);
     }
     else{
         clearCurrentIndexSelection();
         QModelIndex index = FsViewModel->rootIndex();
         QString infoPath = FsModel->fileInfo(index).absoluteFilePath();
-        if (!infoPaths.contains(infoPath)){
-            infoPaths.push_back(infoPath);
-            info *window = new info(Window, infoPath);
-            connect(window, &info::removePathFromList, this, &ModelViewController::deleteInfoPath);
-            window->setWindowFlags(window->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-            window->setModal(false);
-            window->setAttribute(Qt::WA_DeleteOnClose);
-            window->show();
-        }
-        else {
-            emit propertiesWarningSignal(createIdMessage("Properties window is already opened for this entry."));
-        }
+        showInfo(infoPath);
     }
 }
