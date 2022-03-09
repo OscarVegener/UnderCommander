@@ -13,7 +13,7 @@ class tabs : public QTabBar
 {
     Q_OBJECT
 public:
-    tabs(const QString name, ModelViewController *controller, const QString defaultPath = "C:\\", QWidget *parent = nullptr);
+    tabs(const QString name, ModelViewController *controller, const QString defaultPath = "/", QWidget *parent = nullptr);
 
     QString getDefaultPath() const;
     void setDefaultPath(const QString &value);

@@ -1,6 +1,6 @@
 #include "info.h"
 #include "ui_info.h"
-#include "windowsexplorerproperties.h"
+//#include "windowsexplorerproperties.h"
 
 info::info(QWidget *parent, QString path) :
     QDialog(parent),
@@ -115,8 +115,8 @@ void info::on_propertiesButton_clicked()
     if (!calc->Finished() && !calc->Pause()){
         pauseCalculatingSize();
     }
-    WindowsExplorerProperties window(infoPath);
-    window.exec();
+//    WindowsExplorerProperties window(infoPath);
+//    window.exec();
 }
 
 void info::on_pauseResume_clicked()

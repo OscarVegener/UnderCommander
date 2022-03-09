@@ -50,9 +50,9 @@ UnderCommander::~UnderCommander()
 
 void UnderCommander::createTabs()
 {
-    tabBarLeft = new tabs(leftController->getDefaultPath(), leftController, "C:\\", this);
+    tabBarLeft = new tabs(leftController->getDefaultPath(), leftController, "/", this);
     connect(leftController, &ModelViewController::currentPathChanged, tabBarLeft, &tabs::changeTabName);
-    tabBarRight = new tabs(rightController->getDefaultPath(), rightController, "C:\\", this);
+    tabBarRight = new tabs(rightController->getDefaultPath(), rightController, "/", this);
     connect(rightController, &ModelViewController::currentPathChanged, tabBarRight, &tabs::changeTabName);
     ui->verticalLayout_5->insertWidget(0, tabBarLeft);
     ui->verticalLayout_5->setSpacing(0);

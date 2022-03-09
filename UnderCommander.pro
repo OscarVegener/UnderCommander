@@ -4,11 +4,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
-win32-msvc* {
-    INCLUDEPATH += C:\boost
-    LIBS += -LC:\boost\stage\lib
-}
-
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -34,8 +29,8 @@ SOURCES += \
     newfolder.cpp \
     smallcontextmenu.cpp \
     tabs.cpp \
-    undercommander.cpp \
-    windowsexplorerproperties.cpp
+    undercommander.cpp #\
+    # windowsexplorerproperties.cpp
 
 HEADERS += \
     calcsize.h \
@@ -50,8 +45,8 @@ HEADERS += \
     newfolder.h \
     smallcontextmenu.h \
     tabs.h \
-    undercommander.h \
-    windowsexplorerproperties.h
+    undercommander.h #\
+#    windowsexplorerproperties.h
 
 FORMS += \
     copyfolder.ui \

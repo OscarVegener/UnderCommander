@@ -303,13 +303,11 @@ void ModelViewController::go(const QString path)
         {
             clearForwardStack();
             backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
-            QString comboPath;
-            comboPath.push_back(fileInfo.canonicalFilePath().at(0));
-            comboPath.push_back(fileInfo.canonicalFilePath().at(1));
+            QString comboPath = fileInfo.canonicalFilePath();
             if (DriveBox->currentText() != comboPath){
                 DriveBox->setCurrentIndex(DriveBox->findText(comboPath));
             }
-            FsModel->setRootPath(comboPath + "\\");
+            FsModel->setRootPath(comboPath);
             QModelIndex newIndex = FsModel->index(fileInfo.canonicalFilePath());
             FsViewModel->setRootIndex(newIndex);
             emit rootIndexChanged(newIndex);
@@ -333,11 +331,10 @@ void ModelViewController::go(const QString path)
 
 void ModelViewController::changeDrive(const QString path)
 {
-    QString newPath = path + "/";
-    if (newPath != FsModel->rootPath()){
+    if (path != FsModel->rootPath()){
         clearForwardStack();
         backStack.push(FsModel->filePath(FsViewModel->rootIndex()));
-        FsModel->setRootPath(newPath);
+        FsModel->setRootPath(path);
         QModelIndex newIndex = FsModel->index(path);
         FsViewModel->setRootIndex(newIndex);
         emit rootIndexChanged(newIndex);
@@ -534,15 +531,13 @@ void ModelViewController::on_rootIndexChanged(const QModelIndex &index)
     if (index.isValid()){
         QString newPath = FsModel->filePath(index);
         DisplayedPathLineEdit->setText(newPath);
-        QString comboPath;
-        comboPath.push_back(newPath.at(0));
-        comboPath.push_back(newPath.at(1));
-        if (FsModel->rootPath() != (comboPath + "/")){
-            FsModel->setRootPath(comboPath + "/");
+        qDebug() << "rootPath: " + FsModel->rootPath();
+        if (FsModel->rootPath() != (newPath)){
+            FsModel->setRootPath(newPath);
         }
-        if (DriveBox->currentText() != comboPath){
+        if (DriveBox->currentText() != newPath){
             int driveIndex;
-            if((driveIndex =  DriveBox->findText(comboPath)) != -1){
+            if((driveIndex =  DriveBox->findText(newPath)) != -1){
                 qDebug() << "DriveIndex: "<< driveIndex;
                 DriveBox->setCurrentIndex(driveIndex);
             }

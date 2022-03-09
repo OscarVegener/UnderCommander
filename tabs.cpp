@@ -38,10 +38,7 @@ void tabs::createTab(const QString name)
         this->addTab(fileInfo.fileName());
     }
     else{
-        QString newName;
-        newName.push_back(name.at(0));
-        newName.push_back(name.at(1));
-        this->addTab(newName);
+        this->addTab(name);
     }
 
 }

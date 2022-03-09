@@ -1,7 +1,7 @@
 #ifndef MODELVIEWCONTROLLER_H
 #define MODELVIEWCONTROLLER_H
 
-#define defaultPathValue "C:\\"
+#define defaultPathValue "/"
 #define NavigationStackLimit 100
 #include <QObject>
 #include <QFileSystemModel>

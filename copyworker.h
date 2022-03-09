@@ -7,12 +7,15 @@
 #include <QFile>
 #include <QThread>
 #include <QMessageBox>
-#include <filesystem>
+//#include <experimental/filesystem>
+#include <includes/filesystem.hpp>
 #include <QDebug>
 
 using namespace std;
 
-using namespace std::filesystem;
+using namespace ghc::filesystem;
+
+//using namespace std::filesystem;
 
 class CopyWorker : public QObject
 {
