@@ -22,28 +22,36 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     calcsize.cpp \
+    contextmenu.cpp \
     copyfolder.cpp \
     copyingstatuswindow.cpp \
     copyworker.cpp \
     fsview.cpp \
     info.cpp \
     main.cpp \
+    modelviewcontroller.cpp \
     newfile.cpp \
     newfolder.cpp \
+    smallcontextmenu.cpp \
     tabs.cpp \
-    undercommander.cpp
+    undercommander.cpp \
+    windowsexplorerproperties.cpp
 
 HEADERS += \
     calcsize.h \
+    contextmenu.h \
     copyfolder.h \
     copyingstatuswindow.h \
     copyworker.h \
     fsview.h \
     info.h \
+    modelviewcontroller.h \
     newfile.h \
     newfolder.h \
+    smallcontextmenu.h \
     tabs.h \
-    undercommander.h
+    undercommander.h \
+    windowsexplorerproperties.h
 
 FORMS += \
     copyfolder.ui \

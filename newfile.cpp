@@ -24,8 +24,6 @@ newfile::~newfile()
 {
     delete regExp1;
     delete regExp2;
-    delete regExpValidator1;
-    delete regExpValidator2;
     delete ui;
 }
 

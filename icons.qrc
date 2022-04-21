@@ -103,4 +103,9 @@
         <file>icons/icons8-удалить-файл-500.png</file>
         <file>icons/icons8-удалить-файл-500-2.png</file>
     </qresource>
+    <qresource prefix="/info"/>
+    <qresource prefix="/">
+        <file>icons/resume.png</file>
+        <file>icons/pause.png</file>
+    </qresource>
 </RCC>

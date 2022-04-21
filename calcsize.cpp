@@ -10,6 +10,11 @@ bool calcSize::Stop() const
     return m_Stop;
 }
 
+bool calcSize::Pause() const
+{
+    return m_Pause;
+}
+
 qint64 calcSize::dirSize(QString dirPath) {
     if (Stop()){
         return 0;
@@ -22,6 +27,9 @@ qint64 calcSize::dirSize(QString dirPath) {
         if (Stop()){
             return 0;
         }
+        while(Pause()){
+            QThread::sleep(1);
+        }
         QFileInfo fi(dir, filePath);
         size+= fi.size();
     }
@@ -30,6 +38,9 @@ qint64 calcSize::dirSize(QString dirPath) {
     for(QString childDirPath : dir.entryList(dirFilters)){
         if (Stop()){
             return 0;
+        }
+        while(Pause()){
+            QThread::sleep(1);
         }
         size+= dirSize(dirPath + QDir::separator() + childDirPath);
     }
@@ -83,4 +94,13 @@ void calcSize::setStop(bool Stop)
 
     m_Stop = Stop;
     emit StopChanged(m_Stop);
+}
+
+void calcSize::setPause(bool Pause)
+{
+    if (m_Pause == Pause)
+        return;
+
+    m_Pause = Pause;
+    emit PauseChanged(m_Pause);
 }

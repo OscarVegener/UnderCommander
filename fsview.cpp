@@ -12,6 +12,19 @@ void FSView::init()
     this->hideColumn(3);
     this->setUniformRowHeights(true);
     this->setExpandsOnDoubleClick(false);
+    this->setAutoScroll(true);
+}
+
+void FSView::mousePressEvent(QMouseEvent *event)
+{
+    QModelIndex index = indexAt(event->pos());
+    QTreeView::mousePressEvent(event);
+    if(index.row() == -1 && index.column() == -1){
+        clearSelection();
+        QModelIndex newIndex;
+        selectionModel()->setCurrentIndex(newIndex, QItemSelectionModel::Select);
+        emit selectionClearedSignal();
+    }
 }
 
 void FSView::dragEnterEvent(QDragEnterEvent *event){
